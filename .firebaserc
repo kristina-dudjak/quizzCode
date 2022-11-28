@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "learn-programming-3b1a9": {
+      "hosting": {
+        "learn-programming": [
+          "learn-programming-3b1a9"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "learn-programming-3b1a9"
+  }
+}
