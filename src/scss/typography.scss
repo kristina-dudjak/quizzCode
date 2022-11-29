@@ -1,0 +1,57 @@
+@use '@angular/material' as mat;
+@import './colors.scss';
+
+$typography: mat-typography-config(
+  $font-family: 'Poppins',
+  $headline: mat-typography-level(40px, 48px, 600),
+  $subheading-2: mat-typography-level(24px, 32px, 400),
+  $subheading-1: mat-typography-level(20px, 28px, 400),
+  $body-1: mat-typography-level(16px, 24px, normal),
+  $body-2: mat-typography-level(14px, 20px, normal),
+  $caption: mat-typography-level(11px, 16px, normal),
+  $title: mat-typography-level(32px, 40px, normal)
+);
+
+h1 {
+  font-family: mat-font-family($typography);
+  font-size: mat-font-size($typography, headline);
+  line-height: mat-line-height($typography, headline);
+  font-weight: mat-font-weight($typography, headline);
+}
+
+h2 {
+  font-family: mat-font-family($typography);
+  font-size: mat-font-size($typography, title);
+  line-height: mat-line-height($typography, title);
+  font-weight: mat-font-weight($typography, title);
+}
+
+h3 {
+  font-family: mat-font-family($typography);
+  font-size: mat-font-size($typography, subheading-2);
+  line-height: mat-line-height($typography, subheading-2);
+  font-weight: mat-font-weight($typography, subheading-2);
+}
+
+h4 {
+  font-family: mat-font-family($typography);
+  font-size: mat-font-size($typography, subheading-1);
+  line-height: mat-line-height($typography, subheading-1);
+  font-weight: mat-font-weight($typography, subheading-1);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
+p,
+span {
+  font-family: mat-font-family($typography);
+  font-size: mat-font-size($typography, body-1);
+  line-height: mat-line-height($typography, body-1);
+  font-weight: mat-font-weight($typography, body-1);
+  margin: 0;
+}
