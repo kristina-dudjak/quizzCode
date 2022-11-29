@@ -1,1 +1,115 @@
-<p>register works!</p>
+<div class="register">
+  <form
+    class="register__form"
+    [formGroup]="registerForm"
+    (ngSubmit)="onRegister()"
+  >
+    <h3 class="register__form__title">Sign up</h3>
+    <mat-form-field
+      class="register__form__field form-field-border"
+      appearance="outline"
+    >
+      <mat-label class="register__form__field__label">Email</mat-label>
+      <input
+        class="register__form__field__input"
+        matInput
+        required
+        placeholder="example@gmail.com"
+        type="email"
+        autocomplete="on"
+        formControlName="email"
+      />
+      <mat-error
+        class="register__form__field__error"
+        *ngIf="registerForm.hasError('email')"
+        >{{ registerForm.getError('email') }}</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field
+      class="register__form__field form-field-border"
+      appearance="outline"
+    >
+      <mat-label class="register__form__field__label">Password</mat-label>
+      <input
+        class="register__form__field__input"
+        matInput
+        required
+        [type]="isPasswordVisible ? 'password' : 'text'"
+        autocomplete="on"
+        formControlName="password"
+        name="password"
+      />
+      <mat-error
+        class="register__form__field__error"
+        *ngIf="registerForm.hasError('password')"
+        >{{ registerForm.getError('password') }}</mat-error
+      >
+      <button
+        class="register__form__field__toggle"
+        mat-icon-button
+        matSuffix
+        (click)="isPasswordVisible = !isPasswordVisible"
+        [attr.aria-pressed]="isPasswordVisible"
+      >
+        <mat-icon class="register__form__field__toggle__icon">{{
+          isPasswordVisible ? 'visibility_off' : 'visibility'
+        }}</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field
+      class="register__form__field form-field-border"
+      appearance="outline"
+    >
+      <mat-label class="register__form__field__label"
+        >Repeat password</mat-label
+      >
+      <input
+        class="register__form__field__input"
+        matInput
+        required
+        [type]="isPasswordRepeatVisible ? 'password' : 'text'"
+        autocomplete="on"
+        formControlName="repeatPassword"
+        name="repeatPassword"
+      />
+      <mat-error
+        class="register__form__field__error"
+        *ngIf="registerForm.hasError('repeatPassword')"
+        >{{ registerForm.getError('repeatPassword') }}</mat-error
+      >
+      <button
+        class="register__form__field__toggle"
+        mat-icon-button
+        matSuffix
+        (click)="isPasswordRepeatVisible = !isPasswordRepeatVisible"
+        [attr.aria-pressed]="isPasswordRepeatVisible"
+      >
+        <mat-icon class="register__form__field__toggle__icon">{{
+          isPasswordRepeatVisible ? 'visibility_off' : 'visibility'
+        }}</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-checkbox
+      class="register__form__checkbox checked-color"
+      [checked]="rememberMe"
+      >Remember me</mat-checkbox
+    >
+    <button
+      class="register__form__submit"
+      type="submit"
+      mat-raised-button
+      [disabled]="!registerForm.valid"
+    >
+      Sign up
+    </button>
+    <button class="register__form__google" (click)="onGoogleLogin()">
+      <mat-icon
+        class="register__form__google__icon"
+        svgIcon="google"
+      ></mat-icon>
+    </button>
+  </form>
+  <a class="register__redirect" routerLink="/login"
+    >Already have an account? Sign in</a
+  >
+</div>
