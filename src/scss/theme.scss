@@ -1,0 +1,12 @@
+@use '@angular/material' as mat;
+@import './colors.scss';
+@import './typography.scss';
+
+@include mat.core($typography);
+$primary: mat.define-palette($primary);
+$accent: mat.define-palette($accent);
+
+$theme: mat.define-light-theme($primary, $accent);
+
+@include mat.core-theme($theme);
+@include mat.button-theme($theme);
