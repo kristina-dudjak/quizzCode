@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
+import { MatDialog } from '@angular/material/dialog'
 import { PasswordRegex } from 'src/app/shared/const/PasswordRegex'
+import { PasswordResetDialogComponent } from '../../components/password-reset-dialog/password-reset-dialog.component'
 import { ValidationService } from '../../services/validation.service'
 
 @Component({
@@ -11,7 +13,8 @@ import { ValidationService } from '../../services/validation.service'
 export class LoginComponent {
   constructor (
     private validationService: ValidationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog
   ) {}
 
   loginForm = this.fb.group(
@@ -44,5 +47,7 @@ export class LoginComponent {
 
   onGoogleLogin () {}
 
-  openEmailDialog () {}
+  openEmailDialog () {
+    this.dialog.open(PasswordResetDialogComponent)
+  }
 }

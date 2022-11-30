@@ -13,9 +13,14 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { MatButtonModule } from '@angular/material/button'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatCheckboxModule } from '@angular/material/checkbox'
+import { PasswordResetDialogComponent } from './components/password-reset-dialog/password-reset-dialog.component'
 
 @NgModule({
-  declarations: [RegisterComponent, LoginComponent],
+  declarations: [
+    RegisterComponent,
+    LoginComponent,
+    PasswordResetDialogComponent
+  ],
   imports: [
     CommonModule,
     AuthRoutingModule,
