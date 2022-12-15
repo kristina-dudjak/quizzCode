@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { PasswordRegex } from 'src/app/shared/const/PasswordRegex'
+import { AuthService } from '../../services/auth.service'
 import { ValidationService } from '../../services/validation.service'
 
 @Component({
@@ -11,7 +12,8 @@ import { ValidationService } from '../../services/validation.service'
 export class RegisterComponent {
   constructor (
     private validationService: ValidationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService
   ) {}
 
   registerForm = this.fb.group(
@@ -47,13 +49,21 @@ export class RegisterComponent {
 
   isPasswordVisible = true
   isPasswordRepeatVisible = true
+  errorMessage$ = this.authService.errorMessage$
   rememberMe = true
 
   onRegister () {
     if (!this.registerForm.valid) {
       return
     }
+    this.authService.signUp(
+      this.registerForm.value.email as string,
+      this.registerForm.value.password as string,
+      this.rememberMe
+    )
   }
 
-  onGoogleLogin () {}
+  onGoogleLogin () {
+    this.authService.googleSignIn(this.rememberMe)
+  }
 }

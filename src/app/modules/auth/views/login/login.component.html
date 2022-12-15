@@ -68,6 +68,11 @@
     <a class="login__form__forgotPassword" (click)="openEmailDialog()"
       >Forgot password?</a
     >
+    <span
+      class="login__form__errors"
+      *ngIf="(errorMessage$ | async) && (errorMessage$ | async) as errorMessage"
+      >{{ errorMessage }}</span
+    >
     <button class="login__form__google" (click)="onGoogleLogin()">
       <mat-icon class="login__form__google__icon" svgIcon="google"></mat-icon>
     </button>

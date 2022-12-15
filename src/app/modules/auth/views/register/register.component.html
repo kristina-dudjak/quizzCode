@@ -102,6 +102,11 @@
     >
       Sign up
     </button>
+    <span
+      class="register__form__errors"
+      *ngIf="(errorMessage$ | async) && (errorMessage$ | async) as errorMessage"
+      >{{ errorMessage }}</span
+    >
     <button class="register__form__google" (click)="onGoogleLogin()">
       <mat-icon
         class="register__form__google__icon"
