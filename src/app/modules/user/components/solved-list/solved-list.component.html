@@ -1,0 +1,5 @@
+<ul class="solved-quizzes">
+  <li class="solved-quizzes__quiz" *ngFor="let quiz of quizzes$ | async">
+    <app-solved-item [solvedQuiz]="quiz"></app-solved-item>
+  </li>
+</ul>
