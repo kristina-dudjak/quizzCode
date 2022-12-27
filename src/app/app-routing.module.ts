@@ -5,10 +5,11 @@ import {
   redirectUnauthorizedTo,
   canActivate
 } from '@angular/fire/compat/auth-guard'
+import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component'
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login'])
 
-const redirectLoggedInToConfigurator = () => redirectLoggedInTo(['admin'])
+const redirectLoggedInToConfigurator = () => redirectLoggedInTo(['quizzes'])
 
 const routes: Routes = [
   {
@@ -23,10 +24,15 @@ const routes: Routes = [
     ...canActivate(redirectLoggedInToConfigurator)
   },
   {
-    path: '',
+    path: 'quizzes',
     loadChildren: () =>
-      import('./modules/admin/admin.module').then(m => m.AdminModule),
+      import('./modules/user/user.module').then(m => m.UserModule),
     ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: PageNotFoundComponent
   }
 ]
 

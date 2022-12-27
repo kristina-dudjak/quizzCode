@@ -55,7 +55,7 @@ export class AuthService extends Store<AuthInterface> {
           .then(result => {
             this.updateUserState(result.user)
             this.saveUserToDb(result.user)
-            this.router.navigateByUrl('admin')
+            this.router.navigateByUrl('quizzes')
           })
           .catch(error => {
             this.updateErrorMessageState(error.message)
@@ -71,7 +71,7 @@ export class AuthService extends Store<AuthInterface> {
           .signInWithEmailAndPassword(email, password)
           .then(result => {
             this.updateUserState(result.user)
-            this.router.navigateByUrl('admin')
+            this.router.navigateByUrl('quizzes')
           })
           .catch(error => {
             this.updateErrorMessageState(error.message)
@@ -88,7 +88,7 @@ export class AuthService extends Store<AuthInterface> {
           .then(result => {
             this.updateUserState(result.user)
             this.saveUserToDb(result.user)
-            this.router.navigateByUrl('admin')
+            this.router.navigateByUrl('quizzes')
           })
           .catch(error => {
             this.updateErrorMessageState(error.message)
