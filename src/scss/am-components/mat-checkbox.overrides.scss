@@ -1,0 +1,7 @@
+@use '@angular/material' as mat;
+@import '../colors.scss';
+
+.checked-color .mat-checkbox-checkmark-path,
+.mat-checkbox-checked {
+  stroke: mat.get-color-from-palette($primary, 500);
+}
