@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+@import '../../../../scss/colors.scss';
+
+.header {
+  background-color: mat.get-color-from-palette($accent, 300);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    &__icon {
+      color: mat.get-color-from-palette($primary, 500);
+    }
+
+    &__name {
+      margin: 0;
+      color: mat.get-color-from-palette($primary, 500);
+    }
+  }
+
+  &__menu {
+    &__button {
+      &__icon {
+        color: mat.get-color-from-palette($primary, 500);
+      }
+    }
+  }
+}

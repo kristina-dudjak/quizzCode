@@ -2,7 +2,7 @@
 @import './colors.scss';
 @import './typography.scss';
 @import './am-components/mat-checkbox.overrides.scss';
-
+@import './am-components/mat-menu.overrides.scss';
 @include mat.core($typography);
 $primary: mat.define-palette($primary);
 $accent: mat.define-palette($accent);
