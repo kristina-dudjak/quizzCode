@@ -1,0 +1,9 @@
+.solved-quizzes {
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+
+  &__quiz {
+    margin: 20px;
+  }
+}

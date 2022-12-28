@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { QuizService } from '../../services/quiz.service'
 
 @Component({
   selector: 'app-quizzes',
@@ -6,7 +7,9 @@ import { Component, Input, OnInit } from '@angular/core'
   styleUrls: ['./quizzes.component.scss']
 })
 export class QuizzesComponent implements OnInit {
-  constructor () {}
+  constructor (private quizService: QuizService) {}
 
-  ngOnInit (): void {}
+  ngOnInit (): void {
+    this.quizService.getAllQuizzes()
+  }
 }

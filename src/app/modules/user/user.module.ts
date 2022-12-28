@@ -10,9 +10,17 @@ import { QuizzesComponent } from './views/quizzes/quizzes.component'
 
 import { SolvedListComponent } from './components/solved-list/solved-list.component'
 import { SolvedItemComponent } from './components/solved-item/solved-item.component'
+import { AllQuizzesComponent } from './components/all-quizzes/all-quizzes.component'
+import { AvailableQuizComponent } from './components/available-quiz/available-quiz.component'
 
 @NgModule({
-  declarations: [QuizzesComponent, SolvedListComponent, SolvedItemComponent],
+  declarations: [
+    QuizzesComponent,
+    SolvedListComponent,
+    SolvedItemComponent,
+    AllQuizzesComponent,
+    AvailableQuizComponent
+  ],
   imports: [
     CommonModule,
     UserRoutingModule,
