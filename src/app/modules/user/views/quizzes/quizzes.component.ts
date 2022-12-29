@@ -10,6 +10,6 @@ export class QuizzesComponent implements OnInit {
   constructor (private quizService: QuizService) {}
 
   ngOnInit (): void {
-    this.quizService.getAllQuizzes()
+    this.quizService.initialQuizzesLoad()
   }
 }

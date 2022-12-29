@@ -1,0 +1,35 @@
+<div
+  class="quiz-dialog"
+  mat-dialog-content
+  *ngIf="(attemptedQuiz$ | async) && (attemptedQuiz$ | async) as attemptedQuiz"
+>
+  <h3 class="quiz-dialog__title" mat-dialog-title>
+    {{ attemptedQuiz.name }}
+  </h3>
+  <div
+    class="quiz-dialog__levels"
+    *ngIf="(levels$ | async) && (levels$ | async) as levels"
+  >
+    <button
+      class="quiz-dialog__levels__level"
+      mat-button
+      *ngFor="let level of levels"
+      (click)="updateLevel(level)"
+    >
+      {{ level }}
+    </button>
+  </div>
+  <div class="quiz-dialog__actions" mat-dialog-actions>
+    <button
+      class="quiz-dialog__actions__submit"
+      mat-button
+      mat-dialog-close
+      type="submit"
+    >
+      Start
+    </button>
+    <button class="quiz-dialog__actions__close" mat-button mat-dialog-close>
+      Close
+    </button>
+  </div>
+</div>

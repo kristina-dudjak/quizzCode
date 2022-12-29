@@ -1,4 +1,4 @@
-<mat-card class="quiz">
+<mat-card class="quiz" (click)="chooseLevel()">
   <img class="quiz__img" mat-card-sm-image [src]="availableQuiz.thumbnail" />
   <mat-card-title class="quiz__info__name">{{
     availableQuiz.name

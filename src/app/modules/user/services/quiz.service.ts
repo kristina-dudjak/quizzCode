@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { firstValueFrom, map } from 'rxjs'
+import {
+  AngularFirestore,
+  DocumentChangeAction
+} from '@angular/fire/compat/firestore'
+import { firstValueFrom, map, tap } from 'rxjs'
 import { Store } from 'src/app/shared/classes/store.class'
-import { Quiz } from 'src/app/shared/models/Quiz'
+import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
 
 interface QuizInterface {
   allQuizzes: Quiz[]
+  attemptedQuiz: AttemptedQuiz
+  levels: string[]
 }
 
 const initialState: QuizInterface = {
-  allQuizzes: []
+  allQuizzes: [],
+  attemptedQuiz: undefined,
+  levels: []
 }
 
 @Injectable({
@@ -21,52 +28,65 @@ export class QuizService extends Store<QuizInterface> {
   }
 
   allQuizzes$ = this.select(({ allQuizzes }) => allQuizzes)
+  attemptedQuiz$ = this.select(({ attemptedQuiz }) => attemptedQuiz)
+  levels$ = this.select(({ levels }) => levels)
 
-  updateQuizzesState (allQuizzes: Quiz[]) {
-    this.setState({ allQuizzes })
+  updateLevelsState (levels: string[]) {
+    this.setState({ levels })
   }
 
   addQuizToQuizzes (quiz: Quiz) {
     this.setState({ allQuizzes: this.state.allQuizzes.concat(quiz) })
   }
 
-  getAllQuizzes () {
-    return firstValueFrom(
+  initialQuizzesLoad () {
+    firstValueFrom(
       this.db
         .collection('quizzes')
         .snapshotChanges()
         .pipe(
-          map(actions =>
-            actions.map(a => {
-              const image = a.payload.doc.data()['thumbnail']
-              const language = a.payload.doc.id
-              const quiz: Quiz = {
-                name: language,
-                thumbnail: image,
-                levels: []
-              }
-              this.addQuizToQuizzes(quiz)
+          tap(actions =>
+            actions.map(({ payload: { doc } }: DocumentChangeAction<Quiz>) => {
+              this.addQuizToQuizzes({
+                name: doc.id,
+                thumbnail: doc.data()['thumbnail']
+              })
             })
           )
         )
     )
   }
 
-  getQuizLevel (language: string) {
+  updateAttemptedQuiz (attemptedQuiz: Quiz) {
+    this.setState({ attemptedQuiz })
+  }
+
+  updateLevelInAttemptedQuiz (_level: string) {
+    const { level, ...rest } = this.state.attemptedQuiz
+    this.setState({ attemptedQuiz: { level: _level, ...rest } })
+  }
+
+  loadQuizLevels (language: string) {
+    const levels = []
     firstValueFrom(
       this.db
         .collection(`quizzes/${language}/Level`)
         .snapshotChanges()
         .pipe(
           map(actions =>
-            actions.map(a => {
-              const level = a.payload.doc.id
-              console.log(level)
-              this.getMultipleChoiceQuestions(language, level)
-            })
+            actions.map(
+              ({
+                payload: {
+                  doc: { id }
+                }
+              }: DocumentChangeAction<unknown>) => {
+                levels.push(id)
+              }
+            )
           )
         )
     )
+    this.updateLevelsState(levels)
   }
 
   getMultipleChoiceQuestions (language: string, level: string) {
