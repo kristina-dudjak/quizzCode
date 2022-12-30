@@ -1,0 +1,32 @@
+<div
+  class="quiz"
+  *ngIf="
+    (questions$ | async) &&
+    (questions$ | async).length !== 0 &&
+    (questions$ | async) as questions
+  "
+>
+  <div class="quiz__questions">
+    <h3>{{ questions[index$.value].name }}</h3>
+    <h4>Pick one or more answers:</h4>
+    <div
+      *ngFor="let answer of questions[index$.value].answers"
+      [formGroup]="answers"
+    >
+      <mat-checkbox class="checked-color" formControlName="answer">{{
+        answer.name
+      }}</mat-checkbox>
+    </div>
+  </div>
+  <mat-paginator
+    class="quiz__questions"
+    (page)="handlePageEvent($event)"
+    [length]="questions.length"
+    [pageSize]="1"
+    [showFirstLastButtons]="true"
+    [hidePageSize]="true"
+    [pageIndex]="0"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

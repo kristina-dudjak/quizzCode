@@ -6,6 +6,9 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatCardModule } from '@angular/material/card'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatDividerModule } from '@angular/material/divider'
+import { MatPaginatorModule } from '@angular/material/paginator'
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { QuizzesComponent } from './views/quizzes/quizzes.component'
 
@@ -14,6 +17,8 @@ import { SolvedItemComponent } from './components/solved-item/solved-item.compon
 import { AllQuizzesComponent } from './components/all-quizzes/all-quizzes.component'
 import { AvailableQuizComponent } from './components/available-quiz/available-quiz.component'
 import { QuizLevelDialogComponent } from './components/quiz-level-dialog/quiz-level-dialog.component'
+import { QuizComponent } from './views/quiz/quiz.component'
+import { QuizzesDefaultComponent } from './components/quizzes-default/quizzes-default.component'
 
 @NgModule({
   declarations: [
@@ -22,7 +27,9 @@ import { QuizLevelDialogComponent } from './components/quiz-level-dialog/quiz-le
     SolvedItemComponent,
     AllQuizzesComponent,
     AvailableQuizComponent,
-    QuizLevelDialogComponent
+    QuizLevelDialogComponent,
+    QuizComponent,
+    QuizzesDefaultComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +37,11 @@ import { QuizLevelDialogComponent } from './components/quiz-level-dialog/quiz-le
     MatIconModule,
     MatCardModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule,
+    MatCheckboxModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class UserModule {}

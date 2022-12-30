@@ -25,6 +25,8 @@
       mat-button
       mat-dialog-close
       type="submit"
+      [disabled]="!attemptedQuiz.level"
+      [routerLink]="['quizzes', attemptedQuiz.name, attemptedQuiz.level]"
     >
       Start
     </button>
