@@ -8,6 +8,7 @@ import { Store } from 'src/app/shared/classes/store.class'
 import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
+import { User } from 'src/app/shared/models/User'
 
 interface QuizInterface {
   allQuizzes: Quiz[]
@@ -64,13 +65,90 @@ export class QuizService extends Store<QuizInterface> {
     )
   }
 
+  // loadAttemptedQuiz (language: string) {
+  //   const quiz = this.state.allQuizzes.find(quiz => quiz.name === language)
+  //   this.setState({
+  //     attemptedQuiz: {
+  //       name: quiz.name,
+  //       thumbnail: quiz.thumbnail,
+  //       questions: []
+  //     }
+  //   })
+  // }
+
   updateAttemptedQuiz (attemptedQuiz: Quiz) {
-    this.setState({ attemptedQuiz })
+    this.setState({
+      attemptedQuiz: {
+        name: attemptedQuiz.name,
+        thumbnail: attemptedQuiz.thumbnail,
+        questions: []
+      }
+    })
   }
 
   updateLevelInAttemptedQuiz (_level: string) {
     const { level, ...rest } = this.state.attemptedQuiz
     this.setState({ attemptedQuiz: { level: _level, ...rest } })
+  }
+
+  updateQuestionsInAttemptedQuiz () {
+    console.log(this.state.questions)
+    const { questions, ...rest } = this.state.attemptedQuiz
+    this.setState({
+      attemptedQuiz: {
+        questions: this.state.questions,
+        ...rest
+      }
+    })
+  }
+
+  addQuestionToAttemptedQuiz (question: Question) {
+    const { questions, ...rest } = this.state.attemptedQuiz
+    if (
+      this.state.attemptedQuiz.questions.find(q => q.name === question.name)
+    ) {
+      this.setState({
+        attemptedQuiz: {
+          questions: this.state.attemptedQuiz.questions,
+          ...rest
+        }
+      })
+    } else {
+      this.setState({
+        attemptedQuiz: {
+          questions: this.state.attemptedQuiz.questions.concat(question),
+          ...rest
+        }
+      })
+    }
+  }
+
+  saveQuiz (question: Question, user: User) {
+    this.db
+      .collection(`users/${user.uid}/solvedQuizzes`)
+      .doc(this.state.attemptedQuiz.name)
+      .set(
+        {
+          level: this.state.attemptedQuiz.level
+        },
+        { merge: true }
+      )
+    this.saveQuizQuestion(question, user)
+  }
+
+  saveQuizQuestion (question: Question, user: User) {
+    this.db
+      .collection(
+        `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
+      )
+      .doc(question.name)
+      .set(
+        {
+          name: question.name,
+          answers: question.answers
+        },
+        { merge: true }
+      )
   }
 
   loadQuizLevels (language: string) {

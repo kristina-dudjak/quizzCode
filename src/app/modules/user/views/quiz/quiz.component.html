@@ -9,14 +9,20 @@
   <div class="quiz__questions">
     <h3>{{ questions[index$.value].name }}</h3>
     <h4>Pick one or more answers:</h4>
-    <div
+    <form
+      [formGroup]="questionForm"
       *ngFor="let answer of questions[index$.value].answers"
-      [formGroup]="answers"
     >
-      <mat-checkbox class="checked-color" formControlName="answer">{{
-        answer.name
-      }}</mat-checkbox>
-    </div>
+      <label>
+        <input
+          type="checkbox"
+          [value]="answer.name"
+          *ngIf="(user$ | async) && (user$ | async) as user"
+          (change)="onCheckboxChange($event, questions, user)"
+        />
+        {{ answer.name }}
+      </label>
+    </form>
   </div>
   <mat-paginator
     class="quiz__questions"
@@ -30,3 +36,5 @@
   >
   </mat-paginator>
 </div>
+
+<ng-container *ngIf="currentNumberChanged$ | async"></ng-container>

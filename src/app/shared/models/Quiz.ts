@@ -7,5 +7,5 @@ export interface Quiz {
 
 export interface AttemptedQuiz extends Quiz {
   level?: string
-  questions?: Question[]
+  questions: Question[]
 }
