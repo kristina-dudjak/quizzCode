@@ -6,7 +6,12 @@
     (questions$ | async) as questions
   "
 >
-  <div class="quiz__questions">
+  <div
+    class="quiz__questions"
+    *ngIf="
+      (attemptedQuiz$ | async) && (attemptedQuiz$ | async) as attemptedQuiz
+    "
+  >
     <h3>{{ questions[index$.value].name }}</h3>
     <h4>Pick one or more answers:</h4>
     <form
@@ -18,7 +23,14 @@
           type="checkbox"
           [value]="answer.name"
           *ngIf="(user$ | async) && (user$ | async) as user"
-          (change)="onCheckboxChange($event, questions, user)"
+          [checked]="
+            isChecked(
+              questions[index$.value],
+              attemptedQuiz.questions,
+              answer.name
+            )
+          "
+          (change)="onCheckboxChange($event, questions, user, answer)"
         />
         {{ answer.name }}
       </label>
@@ -36,5 +48,3 @@
   >
   </mat-paginator>
 </div>
-
-<ng-container *ngIf="currentNumberChanged$ | async"></ng-container>

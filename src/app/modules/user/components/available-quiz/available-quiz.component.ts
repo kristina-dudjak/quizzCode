@@ -16,7 +16,11 @@ export class AvailableQuizComponent {
   @Input() availableQuiz: Quiz
 
   chooseLevel () {
-    this.quizService.updateAttemptedQuiz(this.availableQuiz)
+    this.quizService.updateAttemptedQuiz({
+      name: this.availableQuiz.name,
+      thumbnail: this.availableQuiz.thumbnail,
+      questions: []
+    })
     this.quizService.loadQuizLevels(this.availableQuiz.name)
     this.dialog.open(QuizLevelDialogComponent)
   }

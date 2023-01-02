@@ -65,23 +65,40 @@ export class QuizService extends Store<QuizInterface> {
     )
   }
 
-  // loadAttemptedQuiz (language: string) {
-  //   const quiz = this.state.allQuizzes.find(quiz => quiz.name === language)
-  //   this.setState({
-  //     attemptedQuiz: {
-  //       name: quiz.name,
-  //       thumbnail: quiz.thumbnail,
-  //       questions: []
-  //     }
-  //   })
-  // }
+  loadAttemptedQuiz (language: string, user: User, level: string) {
+    firstValueFrom(
+      this.db
+        .doc(`users/${user.uid}/solvedQuizzes/${language}`)
+        .get()
+        .pipe(
+          map(doc => {
+            if (!doc.exists)
+              this.updateAttemptedQuiz({
+                name: language,
+                level: level,
+                thumbnail: '',
+                questions: []
+              })
+            else {
+              this.updateAttemptedQuiz({
+                name: doc.id,
+                level: doc.data()['level'],
+                thumbnail: doc.data()['thumbnail'],
+                questions: this.getAttemptedQuizQuestions(language, user)
+              })
+            }
+          })
+        )
+    )
+  }
 
-  updateAttemptedQuiz (attemptedQuiz: Quiz) {
+  updateAttemptedQuiz (attemptedQuiz: AttemptedQuiz) {
     this.setState({
       attemptedQuiz: {
         name: attemptedQuiz.name,
+        level: attemptedQuiz.level,
         thumbnail: attemptedQuiz.thumbnail,
-        questions: []
+        questions: attemptedQuiz.questions
       }
     })
   }
@@ -91,39 +108,7 @@ export class QuizService extends Store<QuizInterface> {
     this.setState({ attemptedQuiz: { level: _level, ...rest } })
   }
 
-  updateQuestionsInAttemptedQuiz () {
-    console.log(this.state.questions)
-    const { questions, ...rest } = this.state.attemptedQuiz
-    this.setState({
-      attemptedQuiz: {
-        questions: this.state.questions,
-        ...rest
-      }
-    })
-  }
-
-  addQuestionToAttemptedQuiz (question: Question) {
-    const { questions, ...rest } = this.state.attemptedQuiz
-    if (
-      this.state.attemptedQuiz.questions.find(q => q.name === question.name)
-    ) {
-      this.setState({
-        attemptedQuiz: {
-          questions: this.state.attemptedQuiz.questions,
-          ...rest
-        }
-      })
-    } else {
-      this.setState({
-        attemptedQuiz: {
-          questions: this.state.attemptedQuiz.questions.concat(question),
-          ...rest
-        }
-      })
-    }
-  }
-
-  saveQuiz (question: Question, user: User) {
+  saveQuiz (user: User) {
     this.db
       .collection(`users/${user.uid}/solvedQuizzes`)
       .doc(this.state.attemptedQuiz.name)
@@ -133,10 +118,9 @@ export class QuizService extends Store<QuizInterface> {
         },
         { merge: true }
       )
-    this.saveQuizQuestion(question, user)
   }
 
-  saveQuizQuestion (question: Question, user: User) {
+  removeQuizQuestion (question: Question, user: User) {
     this.db
       .collection(
         `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
@@ -145,10 +129,47 @@ export class QuizService extends Store<QuizInterface> {
       .set(
         {
           name: question.name,
-          answers: question.answers
+          answers: this.state.attemptedQuiz.questions
+            .find(qu => qu.name === question.name)
+            .answers.filter(answer => answer.name !== question.answers[0].name)
         },
         { merge: true }
       )
+  }
+
+  saveQuizQuestion (question: Question, user: User) {
+    if (
+      !this.state.attemptedQuiz.questions.find(q => q.name === question.name)
+    ) {
+      this.saveQuiz(user)
+      this.db
+        .collection(
+          `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
+        )
+        .doc(question.name)
+        .set(
+          {
+            name: question.name,
+            answers: question.answers
+          },
+          { merge: true }
+        )
+    } else {
+      this.db
+        .collection(
+          `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
+        )
+        .doc(question.name)
+        .set(
+          {
+            name: question.name,
+            answers: this.state.attemptedQuiz.questions
+              .find(q => q.name === question.name)
+              .answers.concat(question.answers)
+          },
+          { merge: true }
+        )
+    }
   }
 
   loadQuizLevels (language: string) {
@@ -197,6 +218,29 @@ export class QuizService extends Store<QuizInterface> {
         )
     )
     this.updateQuestionsState(questions)
+  }
+
+  getAttemptedQuizQuestions (language: string, user: User) {
+    const questions: Question[] = []
+    firstValueFrom(
+      this.db
+        .collection(`users/${user.uid}/solvedQuizzes/${language}/questions`)
+        .snapshotChanges()
+        .pipe(
+          map(actions =>
+            actions.map(
+              ({ payload: { doc } }: DocumentChangeAction<unknown>) => {
+                questions.push({
+                  id: doc.id,
+                  name: doc.data()['name'],
+                  answers: doc.data()['answers']
+                })
+              }
+            )
+          )
+        )
+    )
+    return questions
   }
 
   getAnswers (language: string, level: string, questionId: string) {

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core'
-import { FormArray, FormBuilder, FormControl } from '@angular/forms'
+import { FormBuilder } from '@angular/forms'
 import { PageEvent } from '@angular/material/paginator'
 import { ActivatedRoute } from '@angular/router'
 import { BehaviorSubject, map } from 'rxjs'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
+import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { User } from 'src/app/shared/models/User'
 import { QuizService } from '../../services/quiz.service'
@@ -24,8 +25,10 @@ export class QuizComponent implements OnInit {
   language: string
   level: string
   questions$ = this.quizService.questions$
+  attemptedQuiz$ = this.quizService.attemptedQuiz$
   user$ = this.authService.user$
   index$ = new BehaviorSubject<number>(0)
+  user: User
 
   userQuestion: Question = {
     name: '',
@@ -36,49 +39,44 @@ export class QuizComponent implements OnInit {
   handlePageEvent (e: PageEvent) {
     this.index$.next(e.pageIndex)
     this.userQuestion.answers = []
+    this.quizService.loadAttemptedQuiz(this.language, this.user, this.level)
   }
 
   questionForm = this.formBuilder.group({
     answers: this.formBuilder.array([])
   })
 
-  onCheckboxChange (e, questions: Question[], user: User) {
-    const answers = this.questionForm.get('answers') as FormArray
-    if (e.target.checked) {
-      answers.push(new FormControl(e.target.value))
-      this.userQuestion.answers.push(
-        questions[this.index$.value].answers.find(
-          an => an.name == e.target.value
-        )
-      )
-    } else {
-      let i = 0
-      answers.controls.forEach((item: FormControl) => {
-        if (item.value == e.target.value) {
-          answers.removeAt(i)
-          this.userQuestion.answers = this.userQuestion.answers.filter(
-            answer => answer.name !== e.target.value
-          )
-          return
-        }
-        i++
-      })
-    }
+  onCheckboxChange (e, questions: Question[], user: User, answer: Answer) {
+    this.quizService.loadAttemptedQuiz(this.language, this.user, this.level)
     this.userQuestion.name = questions[this.index$.value].name
     this.userQuestion.id = questions[this.index$.value].id
-    this.quizService.addQuestionToAttemptedQuiz(this.userQuestion)
-    this.quizService.saveQuiz(this.userQuestion, user)
+    this.userQuestion.answers.push(answer)
+    if (e.target.checked) {
+      this.quizService.saveQuizQuestion(this.userQuestion, user)
+    } else {
+      this.quizService.removeQuizQuestion(this.userQuestion, user)
+    }
+    this.userQuestion.answers = []
   }
 
-  currentNumberChanged$ = this.quizService.attemptedQuiz$.pipe(
-    map(a => console.log(a))
-  )
+  isChecked (question: Question, userQuestions: Question[], answerName: string) {
+    if (
+      userQuestions.length === 0 ||
+      !userQuestions.find(q => q.name === question.name)
+    )
+      return false
+    return userQuestions
+      .find(ques => ques.name === question.name)
+      .answers.some(ans => ans.name === answerName)
+  }
 
   ngOnInit (): void {
     this.language = this.route.snapshot.paramMap.get('language')
     this.level = this.route.snapshot.paramMap.get('level')
     this.quizService.initialQuestionsLoad(this.language, this.level)
-    // this.quizService.loadAttemptedQuiz(this.language)
-    // this.quizService.updateQuestionsInAttemptedQuiz()
+    this.authService.user$.subscribe(user => {
+      this.user = user
+    })
+    this.quizService.loadAttemptedQuiz(this.language, this.user, this.level)
   }
 }
