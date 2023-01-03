@@ -13,14 +13,14 @@
     "
   >
     <h3>{{ questions[index$.value].name }}</h3>
-    <h4>Pick one or more answers:</h4>
+    <h4>Choose one answer:</h4>
     <form
       [formGroup]="questionForm"
       *ngFor="let answer of questions[index$.value].answers"
     >
       <label>
         <input
-          type="checkbox"
+          type="radio"
           [value]="answer.name"
           *ngIf="(user$ | async) && (user$ | async) as user"
           [checked]="
@@ -30,7 +30,7 @@
               answer.name
             )
           "
-          (change)="onCheckboxChange($event, questions, user, answer)"
+          (change)="onButtonChange(questions, user, answer)"
         />
         {{ answer.name }}
       </label>
@@ -47,4 +47,11 @@
     aria-label="Select page"
   >
   </mat-paginator>
+  <button
+    class="quiz__submit"
+    (click)="confirm()"
+    *ngIf="page === questions.length - 1"
+  >
+    Finish
+  </button>
 </div>

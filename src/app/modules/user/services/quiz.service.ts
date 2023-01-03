@@ -43,11 +43,13 @@ export class QuizService extends Store<QuizInterface> {
   updateQuestionsState (questions: Question[]) {
     this.setState({ questions })
   }
-  addQuizToQuizzes (quiz: Quiz) {
-    this.setState({ allQuizzes: this.state.allQuizzes.concat(quiz) })
+
+  updateAllQuizzes (allQuizzes: Quiz[]) {
+    this.setState({ allQuizzes })
   }
 
   initialQuizzesLoad () {
+    const quizzes: Quiz[] = []
     firstValueFrom(
       this.db
         .collection('quizzes')
@@ -55,7 +57,7 @@ export class QuizService extends Store<QuizInterface> {
         .pipe(
           tap(actions =>
             actions.map(({ payload: { doc } }: DocumentChangeAction<Quiz>) => {
-              this.addQuizToQuizzes({
+              quizzes.push({
                 name: doc.id,
                 thumbnail: doc.data()['thumbnail']
               })
@@ -63,6 +65,7 @@ export class QuizService extends Store<QuizInterface> {
           )
         )
     )
+    this.updateAllQuizzes(quizzes)
   }
 
   loadAttemptedQuiz (language: string, user: User, level: string) {
@@ -138,38 +141,39 @@ export class QuizService extends Store<QuizInterface> {
   }
 
   saveQuizQuestion (question: Question, user: User) {
-    if (
-      !this.state.attemptedQuiz.questions.find(q => q.name === question.name)
-    ) {
-      this.saveQuiz(user)
-      this.db
-        .collection(
-          `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
-        )
-        .doc(question.name)
-        .set(
-          {
-            name: question.name,
-            answers: question.answers
-          },
-          { merge: true }
-        )
-    } else {
-      this.db
-        .collection(
-          `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
-        )
-        .doc(question.name)
-        .set(
-          {
-            name: question.name,
-            answers: this.state.attemptedQuiz.questions
-              .find(q => q.name === question.name)
-              .answers.concat(question.answers)
-          },
-          { merge: true }
-        )
-    }
+    // if (
+    //   !this.state.attemptedQuiz.questions.find(q => q.name === question.name)
+    // ) {
+    this.saveQuiz(user)
+    this.db
+      .collection(
+        `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
+      )
+      .doc(question.name)
+      .set(
+        {
+          name: question.name,
+          answers: question.answers
+        },
+        { merge: true }
+      )
+    // }
+    // else {
+    //   this.db
+    //     .collection(
+    //       `users/${user.uid}/solvedQuizzes/${this.state.attemptedQuiz.name}/questions`
+    //     )
+    //     .doc(question.name)
+    //     .set(
+    //       {
+    //         name: question.name,
+    //         answers: this.state.attemptedQuiz.questions
+    //           .find(q => q.name === question.name)
+    //           .answers.concat(question.answers)
+    //       },
+    //       { merge: true }
+    //     )
+    // }
   }
 
   loadQuizLevels (language: string) {

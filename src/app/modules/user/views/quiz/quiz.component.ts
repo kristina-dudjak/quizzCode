@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
+import { MatDialog } from '@angular/material/dialog'
 import { PageEvent } from '@angular/material/paginator'
 import { ActivatedRoute } from '@angular/router'
 import { BehaviorSubject, map } from 'rxjs'
@@ -7,6 +8,7 @@ import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { User } from 'src/app/shared/models/User'
+import { ConfirmSubmitDialogComponent } from '../../components/confirm-submit-dialog/confirm-submit-dialog.component'
 import { QuizService } from '../../services/quiz.service'
 
 @Component({
@@ -19,7 +21,8 @@ export class QuizComponent implements OnInit {
     private route: ActivatedRoute,
     private quizService: QuizService,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   language: string
@@ -29,6 +32,7 @@ export class QuizComponent implements OnInit {
   user$ = this.authService.user$
   index$ = new BehaviorSubject<number>(0)
   user: User
+  page: number
 
   userQuestion: Question = {
     name: '',
@@ -37,7 +41,8 @@ export class QuizComponent implements OnInit {
   }
 
   handlePageEvent (e: PageEvent) {
-    this.index$.next(e.pageIndex)
+    this.page = e.pageIndex
+    this.index$.next(this.page)
     this.userQuestion.answers = []
     this.quizService.loadAttemptedQuiz(this.language, this.user, this.level)
   }
@@ -46,16 +51,12 @@ export class QuizComponent implements OnInit {
     answers: this.formBuilder.array([])
   })
 
-  onCheckboxChange (e, questions: Question[], user: User, answer: Answer) {
+  onButtonChange (questions: Question[], user: User, answer: Answer) {
     this.quizService.loadAttemptedQuiz(this.language, this.user, this.level)
     this.userQuestion.name = questions[this.index$.value].name
     this.userQuestion.id = questions[this.index$.value].id
     this.userQuestion.answers.push(answer)
-    if (e.target.checked) {
-      this.quizService.saveQuizQuestion(this.userQuestion, user)
-    } else {
-      this.quizService.removeQuizQuestion(this.userQuestion, user)
-    }
+    this.quizService.saveQuizQuestion(this.userQuestion, user)
     this.userQuestion.answers = []
   }
 
@@ -68,6 +69,10 @@ export class QuizComponent implements OnInit {
     return userQuestions
       .find(ques => ques.name === question.name)
       .answers.some(ans => ans.name === answerName)
+  }
+
+  confirm () {
+    this.dialog.open(ConfirmSubmitDialogComponent)
   }
 
   ngOnInit (): void {
