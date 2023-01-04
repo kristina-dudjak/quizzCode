@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { StoreService } from 'src/app/shared/services/store.service'
 import { QuizService } from '../../services/quiz.service'
 
 @Component({
@@ -7,11 +8,11 @@ import { QuizService } from '../../services/quiz.service'
   styleUrls: ['./quiz-level-dialog.component.scss']
 })
 export class QuizLevelDialogComponent {
-  constructor (private quizService: QuizService) {}
-  attemptedQuiz$ = this.quizService.attemptedQuiz$
-  levels$ = this.quizService.levels$
+  constructor (private storeService: StoreService) {}
+  attemptedQuiz$ = this.storeService.attemptedQuiz$
+  levels$ = this.storeService.levels$
 
   updateLevel (level: string) {
-    this.quizService.updateLevelInAttemptedQuiz(level)
+    this.storeService.updateLevelInAttemptedQuiz(level)
   }
 }

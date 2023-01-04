@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { StoreService } from 'src/app/shared/services/store.service'
 import { QuizService } from '../../services/quiz.service'
 
 @Component({
@@ -7,6 +8,6 @@ import { QuizService } from '../../services/quiz.service'
   styleUrls: ['./all-quizzes.component.scss']
 })
 export class AllQuizzesComponent {
-  constructor (private quizService: QuizService) {}
-  quizzes$ = this.quizService.allQuizzes$
+  constructor (private storeService: StoreService) {}
+  quizzes$ = this.storeService.allQuizzes$
 }

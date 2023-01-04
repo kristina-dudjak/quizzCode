@@ -9,6 +9,9 @@ import { MatDividerModule } from '@angular/material/divider'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { MatRadioModule } from '@angular/material/radio'
+import { MatButtonToggleModule } from '@angular/material/button-toggle'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 import { QuizzesComponent } from './views/quizzes/quizzes.component'
 
@@ -19,6 +22,11 @@ import { AvailableQuizComponent } from './components/available-quiz/available-qu
 import { QuizLevelDialogComponent } from './components/quiz-level-dialog/quiz-level-dialog.component'
 import { QuizComponent } from './views/quiz/quiz.component'
 import { QuizzesDefaultComponent } from './components/quizzes-default/quizzes-default.component'
+import { QuestionItemComponent } from './components/question-item/question-item.component'
+import { IsAnswerCheckedPipe } from './pipes/is-answer-checked.pipe'
+import { ConfirmSubmitDialogComponent } from './components/confirm-submit-dialog/confirm-submit-dialog.component'
+import { QuizResultDialogComponent } from './components/quiz-result-dialog/quiz-result-dialog.component'
+import { QuizDefaultComponent } from './components/quiz-default/quiz-default.component'
 
 @NgModule({
   declarations: [
@@ -29,7 +37,12 @@ import { QuizzesDefaultComponent } from './components/quizzes-default/quizzes-de
     AvailableQuizComponent,
     QuizLevelDialogComponent,
     QuizComponent,
-    QuizzesDefaultComponent
+    QuizzesDefaultComponent,
+    QuestionItemComponent,
+    IsAnswerCheckedPipe,
+    ConfirmSubmitDialogComponent,
+    QuizResultDialogComponent,
+    QuizDefaultComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +54,10 @@ import { QuizzesDefaultComponent } from './components/quizzes-default/quizzes-de
     MatPaginatorModule,
     MatCheckboxModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatRadioModule,
+    MatButtonToggleModule,
+    MatProgressBarModule
   ]
 })
 export class UserModule {}

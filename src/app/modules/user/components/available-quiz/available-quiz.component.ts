@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Quiz } from 'src/app/shared/models/Quiz'
+import { StoreService } from 'src/app/shared/services/store.service'
 import { QuizService } from '../../services/quiz.service'
 import { QuizLevelDialogComponent } from '../quiz-level-dialog/quiz-level-dialog.component'
 
@@ -10,13 +11,17 @@ import { QuizLevelDialogComponent } from '../quiz-level-dialog/quiz-level-dialog
   styleUrls: ['./available-quiz.component.scss']
 })
 export class AvailableQuizComponent {
-  constructor (private dialog: MatDialog, private quizService: QuizService) {}
+  constructor (
+    private dialog: MatDialog,
+    private storeService: StoreService,
+    private quizService: QuizService
+  ) {}
 
-  attemptedQuiz$ = this.quizService.attemptedQuiz$
+  attemptedQuiz$ = this.storeService.attemptedQuiz$
   @Input() availableQuiz: Quiz
 
   chooseLevel () {
-    this.quizService.updateAttemptedQuiz({
+    this.storeService.updateAttemptedQuiz({
       name: this.availableQuiz.name,
       thumbnail: this.availableQuiz.thumbnail,
       questions: []

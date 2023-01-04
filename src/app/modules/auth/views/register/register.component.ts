@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { PasswordRegex } from 'src/app/shared/const/PasswordRegex'
+import { StoreService } from 'src/app/shared/services/store.service'
 import { AuthService } from '../../services/auth.service'
 import { ValidationService } from '../../services/validation.service'
 
@@ -13,7 +14,8 @@ export class RegisterComponent {
   constructor (
     private validationService: ValidationService,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private storeService: StoreService
   ) {}
 
   registerForm = this.fb.group(
@@ -49,7 +51,7 @@ export class RegisterComponent {
 
   isPasswordVisible = true
   isPasswordRepeatVisible = true
-  errorMessage$ = this.authService.errorMessage$
+  errorMessage$ = this.storeService.errorMessage$
   rememberMe = true
 
   onRegister () {

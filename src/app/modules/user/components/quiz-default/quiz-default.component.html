@@ -1,0 +1,41 @@
+<div class="quiz" *ngIf="questions.length !== 0">
+  <div class="quiz__questions">
+    <h3>{{ questions[index$.value].name }}</h3>
+    <h4>Choose one answer:</h4>
+    <form [formGroup]="questionForm">
+      <label *ngFor="let answer of questions[index$.value].answers">
+        <input
+          type="radio"
+          [value]="answer.name"
+          [checked]="
+            isChecked(
+              questions[index$.value],
+              attemptedQuiz.questions,
+              answer.name
+            )
+          "
+          (change)="onButtonChange(questions, user, answer)"
+        />
+        {{ answer.name }}
+      </label>
+    </form>
+  </div>
+  <mat-paginator
+    class="quiz__questions"
+    (page)="handlePageEvent($event)"
+    [length]="questions.length"
+    [pageSize]="1"
+    [showFirstLastButtons]="true"
+    [hidePageSize]="true"
+    [pageIndex]="0"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+  <button
+    class="quiz__submit"
+    (click)="confirm()"
+    *ngIf="page === questions.length - 1"
+  >
+    Finish
+  </button>
+</div>

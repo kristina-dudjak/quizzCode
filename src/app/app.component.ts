@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService } from './modules/auth/services/auth.service'
 import { IconsService } from './shared/services/icons.service'
+import { StoreService } from './shared/services/store.service'
 
 @Component({
   selector: 'app-root',
@@ -10,9 +11,9 @@ import { IconsService } from './shared/services/icons.service'
 export class AppComponent implements OnInit {
   constructor (
     private iconsService: IconsService,
-    private authService: AuthService
+    private storeService: StoreService
   ) {}
-  user$ = this.authService.user$
+  user$ = this.storeService.user$
 
   ngOnInit () {
     this.iconsService.addIcons()

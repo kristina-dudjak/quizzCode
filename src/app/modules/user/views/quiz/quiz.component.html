@@ -1,57 +1,8 @@
-<div
-  class="quiz"
-  *ngIf="
-    (questions$ | async) &&
-    (questions$ | async).length !== 0 &&
-    (questions$ | async) as questions
-  "
->
-  <div
-    class="quiz__questions"
-    *ngIf="
-      (attemptedQuiz$ | async) && (attemptedQuiz$ | async) as attemptedQuiz
-    "
-  >
-    <h3>{{ questions[index$.value].name }}</h3>
-    <h4>Choose one answer:</h4>
-    <form
-      [formGroup]="questionForm"
-      *ngFor="let answer of questions[index$.value].answers"
-    >
-      <label>
-        <input
-          type="radio"
-          [value]="answer.name"
-          *ngIf="(user$ | async) && (user$ | async) as user"
-          [checked]="
-            isChecked(
-              questions[index$.value],
-              attemptedQuiz.questions,
-              answer.name
-            )
-          "
-          (change)="onButtonChange(questions, user, answer)"
-        />
-        {{ answer.name }}
-      </label>
-    </form>
-  </div>
-  <mat-paginator
-    class="quiz__questions"
-    (page)="handlePageEvent($event)"
-    [length]="questions.length"
-    [pageSize]="1"
-    [showFirstLastButtons]="true"
-    [hidePageSize]="true"
-    [pageIndex]="0"
-    aria-label="Select page"
-  >
-  </mat-paginator>
-  <button
-    class="quiz__submit"
-    (click)="confirm()"
-    *ngIf="page === questions.length - 1"
-  >
-    Finish
-  </button>
+<div *ngIf="user$ | async as user">
+  <app-quiz-default
+    [user]="user"
+    [attemptedQuiz]="attemptedQuiz$ | async"
+    [allQuizzes]="allQuizzes$ | async"
+    [questions]="questions$ | async"
+  ></app-quiz-default>
 </div>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog'
 import { PasswordRegex } from 'src/app/shared/const/PasswordRegex'
+import { StoreService } from 'src/app/shared/services/store.service'
 import { PasswordResetDialogComponent } from '../../components/password-reset-dialog/password-reset-dialog.component'
 import { AuthService } from '../../services/auth.service'
 import { ValidationService } from '../../services/validation.service'
@@ -16,9 +17,10 @@ export class LoginComponent {
     private validationService: ValidationService,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private storeService: StoreService
   ) {}
-  errorMessage$ = this.authService.errorMessage$
+  errorMessage$ = this.storeService.errorMessage$
 
   loginForm = this.fb.group(
     {
