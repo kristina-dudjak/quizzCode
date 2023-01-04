@@ -4,13 +4,12 @@ import { MatDialog } from '@angular/material/dialog'
 import { PageEvent } from '@angular/material/paginator'
 import { ActivatedRoute } from '@angular/router'
 import { BehaviorSubject } from 'rxjs'
-import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
 import { User } from 'src/app/shared/models/User'
-import { StoreService } from 'src/app/shared/services/store.service'
 import { QuizService } from '../../services/quiz.service'
+import { UserService } from '../../services/user.service'
 import { ConfirmSubmitDialogComponent } from '../confirm-submit-dialog/confirm-submit-dialog.component'
 
 @Component({
@@ -23,9 +22,8 @@ export class QuizDefaultComponent implements OnInit {
     private route: ActivatedRoute,
     private quizService: QuizService,
     private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private dialog: MatDialog,
-    private storeService: StoreService
+    private userService: UserService,
+    private dialog: MatDialog
   ) {}
 
   @Input() user: User
@@ -46,7 +44,7 @@ export class QuizDefaultComponent implements OnInit {
     this.page = e.pageIndex
     this.index$.next(this.page)
     this.userQuestion.answers = []
-    this.authService.loadAttemptedQuiz(
+    this.userService.loadAttemptedQuiz(
       this.language,
       this.level,
       this.user,
@@ -61,7 +59,7 @@ export class QuizDefaultComponent implements OnInit {
 
   onButtonChange (questions: Question[], user: User, answer: Answer) {
     this.userQuestion.answers = []
-    this.authService.loadAttemptedQuiz(
+    this.userService.loadAttemptedQuiz(
       this.language,
       this.level,
       this.user,
@@ -71,7 +69,7 @@ export class QuizDefaultComponent implements OnInit {
     this.userQuestion.name = questions[this.index$.value].name
     this.userQuestion.id = questions[this.index$.value].id
     this.userQuestion.answers.push(answer)
-    this.authService.saveQuizQuestion(
+    this.userService.saveQuizQuestion(
       this.userQuestion,
       this.user,
       this.attemptedQuiz
@@ -97,7 +95,7 @@ export class QuizDefaultComponent implements OnInit {
     this.language = this.route.snapshot.paramMap.get('language')
     this.level = this.route.snapshot.paramMap.get('level')
     this.quizService.initialQuestionsLoad(this.language, this.level)
-    this.authService.loadAttemptedQuiz(
+    this.userService.loadAttemptedQuiz(
       this.language,
       this.level,
       this.user,
