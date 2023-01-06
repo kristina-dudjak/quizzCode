@@ -2,7 +2,7 @@
   <div class="quiz__questions">
     <h3>{{ questions[index$.value].name }}</h3>
     <h4>Choose one answer:</h4>
-    <form [formGroup]="questionForm">
+    <form [formGroup]="questionForm" *ngIf="questions.length !== 0">
       <label *ngFor="let answer of questions[index$.value].answers">
         <input
           type="radio"

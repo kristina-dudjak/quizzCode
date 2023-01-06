@@ -1,8 +1,11 @@
 <section class="quizzes">
   <h2 class="quizzes__title">Solved</h2>
-  <!-- <app-solved-list></app-solved-list> -->
-  <app-solved-item class="quizzes__item"></app-solved-item>
-  <app-solved-item class="quizzes__item"></app-solved-item>
+  <app-solved-list
+    *ngIf="(user$ | async) && (user$ | async) as user"
+    [user]="user"
+  ></app-solved-list>
+  <!-- <app-solved-item class="quizzes__item"></app-solved-item>
+  <app-solved-item class="quizzes__item"></app-solved-item> -->
   <mat-divider class="quizzes__divider"></mat-divider>
   <h2 class="quizzes__title">All quizzes</h2>
   <app-all-quizzes class="quizzes__item"></app-all-quizzes>

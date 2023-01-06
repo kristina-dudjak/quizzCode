@@ -8,6 +8,7 @@ import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
 import { User } from 'src/app/shared/models/User'
+import { StoreService } from 'src/app/shared/services/store.service'
 import { QuizService } from '../../services/quiz.service'
 import { UserService } from '../../services/user.service'
 import { ConfirmSubmitDialogComponent } from '../confirm-submit-dialog/confirm-submit-dialog.component'
@@ -23,7 +24,8 @@ export class QuizDefaultComponent implements OnInit {
     private quizService: QuizService,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private storeService: StoreService
   ) {}
 
   @Input() user: User
@@ -34,16 +36,16 @@ export class QuizDefaultComponent implements OnInit {
   page: number
   language: string
   level: string
-  userQuestion: Question = {
-    name: '',
-    id: '',
-    answers: []
-  }
+  // userQuestion: Question = {
+  //   name: '',
+  //   id: '',
+  //   answers: []
+  // }
 
   handlePageEvent (e: PageEvent) {
     this.page = e.pageIndex
     this.index$.next(this.page)
-    this.userQuestion.answers = []
+    // this.userQuestion.answers = []
     this.userService.loadAttemptedQuiz(
       this.language,
       this.level,
@@ -58,7 +60,7 @@ export class QuizDefaultComponent implements OnInit {
   })
 
   onButtonChange (questions: Question[], user: User, answer: Answer) {
-    this.userQuestion.answers = []
+    // this.userQuestion.answers = []
     this.userService.loadAttemptedQuiz(
       this.language,
       this.level,
@@ -66,11 +68,18 @@ export class QuizDefaultComponent implements OnInit {
       this.allQuizzes,
       this.questions
     )
-    this.userQuestion.name = questions[this.index$.value].name
-    this.userQuestion.id = questions[this.index$.value].id
-    this.userQuestion.answers.push(answer)
+    // this.userQuestion.name = questions[this.index$.value].name
+    // this.userQuestion.id = questions[this.index$.value].id
+    // this.userQuestion.answers.push(answer)
+    const answers: Answer[] = []
+    answers.push(answer)
     this.userService.saveQuizQuestion(
-      this.userQuestion,
+      // this.userQuestion,,
+      {
+        name: questions[this.index$.value].name,
+        id: questions[this.index$.value].id,
+        answers: answers
+      },
       this.user,
       this.attemptedQuiz
     )
@@ -94,7 +103,6 @@ export class QuizDefaultComponent implements OnInit {
   ngOnInit (): void {
     this.language = this.route.snapshot.paramMap.get('language')
     this.level = this.route.snapshot.paramMap.get('level')
-    this.quizService.initialQuestionsLoad(this.language, this.level)
     this.userService.loadAttemptedQuiz(
       this.language,
       this.level,

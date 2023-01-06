@@ -1,4 +1,4 @@
-<div *ngIf="user$ | async as user">
+<div *ngIf="(questions$ | async).length !== 0 && (user$ | async) as user">
   <app-quiz-default
     [user]="user"
     [attemptedQuiz]="attemptedQuiz$ | async"

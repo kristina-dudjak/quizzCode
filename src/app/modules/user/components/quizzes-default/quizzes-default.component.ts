@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { StoreService } from 'src/app/shared/services/store.service'
 import { QuizService } from '../../services/quiz.service'
 

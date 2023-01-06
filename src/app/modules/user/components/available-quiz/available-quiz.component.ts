@@ -17,7 +17,6 @@ export class AvailableQuizComponent {
     private quizService: QuizService
   ) {}
 
-  attemptedQuiz$ = this.storeService.attemptedQuiz$
   @Input() availableQuiz: Quiz
 
   chooseLevel () {

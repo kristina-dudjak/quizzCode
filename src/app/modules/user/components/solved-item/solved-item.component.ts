@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { AttemptedQuiz } from 'src/app/shared/models/Quiz'
 
 @Component({
   selector: 'app-solved-item',
@@ -8,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core'
 export class SolvedItemComponent implements OnInit {
   constructor () {}
 
-  @Input() solvedQuiz: any
+  @Input() solvedQuiz: AttemptedQuiz
 
   ngOnInit (): void {}
 }

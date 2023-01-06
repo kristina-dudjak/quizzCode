@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Component, Input, OnInit } from '@angular/core'
+import { User } from 'src/app/shared/models/User'
+import { UserService } from '../../services/user.service'
 
 @Component({
   selector: 'app-solved-list',
@@ -7,9 +8,10 @@ import { Observable } from 'rxjs'
   styleUrls: ['./solved-list.component.scss']
 })
 export class SolvedListComponent implements OnInit {
-  constructor () {}
+  constructor (private userService: UserService) {}
+  @Input() user: User
 
-  quizzes$: any
-
-  ngOnInit (): void {}
+  ngOnInit (): void {
+    this.userService.getUserQuizLanguages(this.user)
+  }
 }

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core'
 import { StoreService } from 'src/app/shared/services/store.service'
-import { QuizService } from '../../services/quiz.service'
 
 @Component({
   selector: 'app-quiz-level-dialog',

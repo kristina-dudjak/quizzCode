@@ -18,7 +18,7 @@ export class UserService {
     private storeService: StoreService
   ) {}
 
-  getUserQuizzes (user: User) {
+  getUserQuizLanguages (user: User) {
     const quizzes: AttemptedQuiz[] = []
     firstValueFrom(
       this.db
@@ -37,13 +37,13 @@ export class UserService {
             )
           ),
           tap(() => {
-            this.getLevel(user, quizzes)
+            this.getAllUserQuizzes(user, quizzes)
           })
         )
     )
   }
 
-  getLevel (user: User, quizzes: AttemptedQuiz[]) {
+  getAllUserQuizzes (user: User, quizzes: AttemptedQuiz[]) {
     const allQuizzes: AttemptedQuiz[] = []
     quizzes.forEach(quiz => {
       firstValueFrom(

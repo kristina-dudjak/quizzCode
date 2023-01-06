@@ -15,18 +15,6 @@
     align-self: center;
   }
 
-  &__levels {
-    display: flex;
-    gap: 12px;
-
-    &__level {
-      padding: 12px 20px;
-      cursor: pointer;
-      border: 1px solid mat.get-color-from-palette($primary, 200);
-      border-radius: 32px;
-    }
-  }
-
   &__actions {
     display: flex;
     gap: 12px;
