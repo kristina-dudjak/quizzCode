@@ -42,7 +42,7 @@ export class QuizService {
     const levels = []
     firstValueFrom(
       this.db
-        .collection(`quizzes/${language}/Level`)
+        .collection(`quizzes/${language}/Level`, ref => ref.orderBy('id'))
         .snapshotChanges()
         .pipe(
           map(actions =>
