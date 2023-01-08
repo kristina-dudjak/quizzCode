@@ -31,6 +31,7 @@ export class UserService {
                 quizzes.push({
                   name: doc.data()['name'],
                   thumbnail: doc.data()['thumbnail'],
+                  isCompleted: false,
                   questions: []
                 })
               }
@@ -58,18 +59,16 @@ export class UserService {
                     name: quiz.name,
                     thumbnail: quiz.thumbnail,
                     score: doc.data()['score'],
+                    isCompleted: doc.data()['isCompleted'],
                     totalQuestions: doc.data()['totalQuestions'],
                     level: doc.id,
                     questions: []
                   })
                 }
               )
-            ),
-            tap(() => {
-              this.storeService.updateUserQuizzes(allQuizzes)
-            })
+            )
           )
-      )
+      ).then(() => this.storeService.updateUserQuizzes(allQuizzes))
     })
   }
 
@@ -114,6 +113,7 @@ export class UserService {
               this.storeService.updateAttemptedQuiz({
                 name: doc.id,
                 level: level,
+                isCompleted: doc.data()['isCompleted'],
                 thumbnail: allQuizzes.find(quiz => quiz.name === language)
                   .thumbnail,
                 questions: this.getAttemptedQuizQuestions(language, level, user)
@@ -144,7 +144,10 @@ export class UserService {
     this.db
       .collection(`users/${user.uid}/solvedQuizzes/${language}/Level`)
       .doc(level)
-      .set({ score: 0, totalQuestions: questions.length }, { merge: true })
+      .set(
+        { score: 0, totalQuestions: questions.length, isCompleted: false },
+        { merge: true }
+      )
     questions.forEach(question => {
       this.db
         .collection(
@@ -156,6 +159,7 @@ export class UserService {
           this.storeService.updateAttemptedQuiz({
             name: language,
             level: level,
+            isCompleted: false,
             thumbnail: allQuizzes.find(quiz => quiz.name === language)
               .thumbnail,
             questions: this.getAttemptedQuizQuestions(language, level, user)
@@ -187,6 +191,7 @@ export class UserService {
           name: attemptedQuiz.name,
           level: attemptedQuiz.level,
           thumbnail: attemptedQuiz.thumbnail,
+          isCompleted: false,
           questions: this.getAttemptedQuizQuestions(
             attemptedQuiz.name,
             attemptedQuiz.level,
@@ -204,11 +209,12 @@ export class UserService {
     this.db
       .collection(`users/${user.uid}/solvedQuizzes/${attemptedQuiz.name}/Level`)
       .doc(attemptedQuiz.level)
-      .set({ score: sum }, { merge: true })
+      .set({ score: sum, isCompleted: true }, { merge: true })
     this.storeService.updateScoreInAttemptedQuiz(sum)
     this.storeService.updateTotalQuestionsInAttemptedQuiz(
       attemptedQuiz.questions.length
     )
+    this.storeService.updateCompletionInAttemptedQuiz(true)
   }
 
   getAttemptedQuizQuestions (language: string, level: string, user: User) {

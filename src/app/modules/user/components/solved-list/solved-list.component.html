@@ -1,5 +1,25 @@
-<ul class="solved-quizzes">
-  <li class="solved-quizzes__quiz" *ngFor="let quiz of user.solvedQuizzes">
-    <app-solved-item [solvedQuiz]="quiz"></app-solved-item>
-  </li>
-</ul>
+<div *ngIf="user && user.solvedQuizzes && user.solvedQuizzes.length !== 0">
+  <h2 class="quizzes__title">Solved</h2>
+  <ul class="solved-quizzes">
+    <li
+      class="solved-quizzes__quiz"
+      *ngFor="let quiz of user.solvedQuizzes | solvedQuizzes: true"
+    >
+      <app-solved-item [solvedQuiz]="quiz"></app-solved-item>
+    </li>
+  </ul>
+  <h2
+    class="quizzes__title"
+    *ngIf="(user.solvedQuizzes | solvedQuizzes: false).length !== 0"
+  >
+    In progress
+  </h2>
+  <ul class="solved-quizzes">
+    <li
+      class="solved-quizzes__quiz"
+      *ngFor="let quiz of user.solvedQuizzes | solvedQuizzes: false"
+    >
+      <app-solved-item [solvedQuiz]="quiz"></app-solved-item>
+    </li>
+  </ul>
+</div>

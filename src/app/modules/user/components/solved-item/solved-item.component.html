@@ -7,12 +7,27 @@
     <mat-card-subtitle class="quiz__info__subtitle"
       >Level: {{ solvedQuiz.level }}</mat-card-subtitle
     >
-    <mat-card-subtitle class="quiz__info__subtitle"
+    <mat-card-subtitle
+      class="quiz__info__subtitle"
+      *ngIf="solvedQuiz.isCompleted"
       >Score: {{ solvedQuiz.score }} /
       {{ solvedQuiz.totalQuestions }}</mat-card-subtitle
     >
     <mat-card-actions class="quiz__info__actions">
-      <button class="quiz__info__actions__retry" mat-button>Try again</button>
+      <button
+        class="quiz__info__actions__retry"
+        mat-button
+        *ngIf="solvedQuiz.isCompleted"
+      >
+        Try again
+      </button>
+      <button
+        class="quiz__info__actions__retry"
+        mat-button
+        *ngIf="!solvedQuiz.isCompleted"
+      >
+        Continue
+      </button>
     </mat-card-actions>
   </div>
 </mat-card>

@@ -27,6 +27,7 @@ import { IsAnswerCheckedPipe } from './pipes/is-answer-checked.pipe'
 import { ConfirmSubmitDialogComponent } from './components/confirm-submit-dialog/confirm-submit-dialog.component'
 import { QuizResultDialogComponent } from './components/quiz-result-dialog/quiz-result-dialog.component'
 import { QuizDefaultComponent } from './components/quiz-default/quiz-default.component'
+import { SolvedQuizzesPipe } from './pipes/solved-quizzes.pipe'
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { QuizDefaultComponent } from './components/quiz-default/quiz-default.com
     IsAnswerCheckedPipe,
     ConfirmSubmitDialogComponent,
     QuizResultDialogComponent,
-    QuizDefaultComponent
+    QuizDefaultComponent,
+    SolvedQuizzesPipe
   ],
   imports: [
     CommonModule,

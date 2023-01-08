@@ -23,6 +23,7 @@ export class AvailableQuizComponent {
     this.storeService.updateAttemptedQuiz({
       name: this.availableQuiz.name,
       thumbnail: this.availableQuiz.thumbnail,
+      isCompleted: false,
       questions: []
     })
     this.quizService.loadQuizLevels(this.availableQuiz.name)

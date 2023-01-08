@@ -68,12 +68,18 @@ export class StoreService extends Store<StoreInterface> {
     this.setState({ user: { solvedQuizzes: quizzes, ...rest } })
   }
 
+  updateCompletionInAttemptedQuiz (complete: boolean) {
+    const { isCompleted, ...rest } = this.state.attemptedQuiz
+    this.setState({ attemptedQuiz: { isCompleted: complete, ...rest } })
+  }
+
   updateAttemptedQuiz (attemptedQuiz: AttemptedQuiz) {
     this.setState({
       attemptedQuiz: {
         name: attemptedQuiz.name,
         level: attemptedQuiz.level,
         thumbnail: attemptedQuiz.thumbnail,
+        isCompleted: attemptedQuiz.isCompleted,
         score: 0,
         questions: attemptedQuiz.questions
       }
