@@ -8,5 +8,6 @@ export interface Quiz {
 export interface AttemptedQuiz extends Quiz {
   level?: string
   score?: number
+  totalQuestions?: number
   questions: Question[]
 }

@@ -25,13 +25,7 @@ export class QuizComponent implements OnInit {
   ngOnInit (): void {
     this.language = this.route.snapshot.paramMap.get('language')
     this.level = this.route.snapshot.paramMap.get('level')
+    this.quizService.initialQuizzesLoad()
     this.quizService.initialQuestionsLoad(this.language, this.level)
-    // this.userService.loadAttemptedQuiz(
-    //   this.language,
-    //   this.level,
-    //   this.user,
-    //   this.allQuizzes,
-    //   this.questions
-    // )
   }
 }

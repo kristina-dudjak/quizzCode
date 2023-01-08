@@ -85,6 +85,11 @@ export class StoreService extends Store<StoreInterface> {
     this.setState({ attemptedQuiz: { score: _score, ...rest } })
   }
 
+  updateTotalQuestionsInAttemptedQuiz (total: number) {
+    const { totalQuestions, ...rest } = this.state.attemptedQuiz
+    this.setState({ attemptedQuiz: { totalQuestions: total, ...rest } })
+  }
+
   updateLevelInAttemptedQuiz (_level: string) {
     const { level, ...rest } = this.state.attemptedQuiz
     this.setState({ attemptedQuiz: { level: _level, ...rest } })

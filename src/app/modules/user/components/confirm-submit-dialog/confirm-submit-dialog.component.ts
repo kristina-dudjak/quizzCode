@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
-import { Router } from '@angular/router'
+import { AttemptedQuiz } from 'src/app/shared/models/Quiz'
+import { User } from 'src/app/shared/models/User'
+import { StoreService } from 'src/app/shared/services/store.service'
+import { UserService } from '../../services/user.service'
 import { QuizResultDialogComponent } from '../quiz-result-dialog/quiz-result-dialog.component'
 
 @Component({
@@ -8,13 +11,17 @@ import { QuizResultDialogComponent } from '../quiz-result-dialog/quiz-result-dia
   templateUrl: './confirm-submit-dialog.component.html',
   styleUrls: ['./confirm-submit-dialog.component.scss']
 })
-export class ConfirmSubmitDialogComponent implements OnInit {
-  constructor (private dialog: MatDialog, private router: Router) {}
+export class ConfirmSubmitDialogComponent {
+  constructor (
+    private dialog: MatDialog,
+    private userService: UserService,
+    private storeService: StoreService
+  ) {}
+  attemptedQuiz$ = this.storeService.attemptedQuiz$
+  user$ = this.storeService.user$
 
-  ngOnInit (): void {}
-
-  showResult () {
+  showResult (attemptedQuiz: AttemptedQuiz, user: User) {
     this.dialog.open(QuizResultDialogComponent, { disableClose: true })
-    // this.router.navigateByUrl('quizzes')
+    this.userService.saveQuizScore(attemptedQuiz, user)
   }
 }

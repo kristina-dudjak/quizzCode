@@ -1,8 +1,8 @@
-<div class="quiz" *ngIf="questions.length !== 0">
+<div class="quiz" *ngIf="questions && questions.length !== 0">
   <div class="quiz__questions">
     <h3>{{ questions[index$.value].name }}</h3>
     <h4>Choose one answer:</h4>
-    <form [formGroup]="questionForm" *ngIf="questions.length !== 0">
+    <form *ngIf="attemptedQuiz && attemptedQuiz.questions.length !== 0">
       <label *ngFor="let answer of questions[index$.value].answers">
         <input
           type="radio"
@@ -14,7 +14,7 @@
               answer.name
             )
           "
-          (change)="onButtonChange(questions, user, answer)"
+          (change)="onButtonChange(questions, answer)"
         />
         {{ answer.name }}
       </label>

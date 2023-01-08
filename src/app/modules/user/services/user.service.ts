@@ -58,6 +58,7 @@ export class UserService {
                     name: quiz.name,
                     thumbnail: quiz.thumbnail,
                     score: doc.data()['score'],
+                    totalQuestions: doc.data()['totalQuestions'],
                     level: doc.id,
                     questions: []
                   })
@@ -88,19 +89,12 @@ export class UserService {
           map(doc => {
             if (!doc.exists) {
               this.saveQuiz(language, level, user, allQuizzes, questions)
-              this.storeService.updateAttemptedQuiz({
-                name: language,
-                level: level,
-                thumbnail: allQuizzes.find(quiz => quiz.name === language)
-                  .thumbnail,
-                questions: []
-              })
             } else {
               firstValueFrom(
                 this.db
-                  .collection(`users/${user.uid}/solvedQuizzes`)
-                  .doc(language)
-                  .collection(`Level`)
+                  .collection(
+                    `users/${user.uid}/solvedQuizzes/${language}/Level`
+                  )
                   .doc(level)
                   .get()
                   .pipe(
@@ -120,7 +114,8 @@ export class UserService {
               this.storeService.updateAttemptedQuiz({
                 name: doc.id,
                 level: level,
-                thumbnail: doc.data()['thumbnail'],
+                thumbnail: allQuizzes.find(quiz => quiz.name === language)
+                  .thumbnail,
                 questions: this.getAttemptedQuizQuestions(language, level, user)
               })
             }
@@ -147,20 +142,25 @@ export class UserService {
         { merge: true }
       )
     this.db
-      .collection(`users/${user.uid}/solvedQuizzes`)
-      .doc(language)
-      .collection(`Level`)
+      .collection(`users/${user.uid}/solvedQuizzes/${language}/Level`)
       .doc(level)
-      .set({ score: 0 }, { merge: true })
+      .set({ score: 0, totalQuestions: questions.length }, { merge: true })
     questions.forEach(question => {
       this.db
-        .collection(`users/${user.uid}/solvedQuizzes`)
-        .doc(language)
-        .collection(`Level`)
-        .doc(level)
-        .collection(`questions`)
+        .collection(
+          `users/${user.uid}/solvedQuizzes/${language}/Level/${level}/questions`
+        )
         .doc(question.name)
         .set({ name: question.name, answers: [] }, { merge: true })
+        .then(() => {
+          this.storeService.updateAttemptedQuiz({
+            name: language,
+            level: level,
+            thumbnail: allQuizzes.find(quiz => quiz.name === language)
+              .thumbnail,
+            questions: this.getAttemptedQuizQuestions(language, level, user)
+          })
+        })
     })
   }
 
@@ -171,11 +171,9 @@ export class UserService {
   ) {
     const ans = question.answers
     this.db
-      .collection(`users/${user.uid}/solvedQuizzes`)
-      .doc(attemptedQuiz.name)
-      .collection(`Level`)
-      .doc(attemptedQuiz.level)
-      .collection(`questions`)
+      .collection(
+        `users/${user.uid}/solvedQuizzes/${attemptedQuiz.name}/Level/${attemptedQuiz.level}/questions`
+      )
       .doc(question.name)
       .set(
         {
@@ -184,27 +182,42 @@ export class UserService {
         },
         { merge: true }
       )
+      .then(() => {
+        this.storeService.updateAttemptedQuiz({
+          name: attemptedQuiz.name,
+          level: attemptedQuiz.level,
+          thumbnail: attemptedQuiz.thumbnail,
+          questions: this.getAttemptedQuizQuestions(
+            attemptedQuiz.name,
+            attemptedQuiz.level,
+            user
+          )
+        })
+      })
   }
 
-  calculate (attemptedQuiz: AttemptedQuiz) {
+  saveQuizScore (attemptedQuiz: AttemptedQuiz, user: User) {
     var sum = 0
     attemptedQuiz.questions.forEach(question => {
       if (question.answers.length !== 0 && question.answers[0].correct) sum++
     })
+    this.db
+      .collection(`users/${user.uid}/solvedQuizzes/${attemptedQuiz.name}/Level`)
+      .doc(attemptedQuiz.level)
+      .set({ score: sum }, { merge: true })
     this.storeService.updateScoreInAttemptedQuiz(sum)
-    // return sum
-    // return (sum / this.state.attemptedQuiz.questions.length) * 100
+    this.storeService.updateTotalQuestionsInAttemptedQuiz(
+      attemptedQuiz.questions.length
+    )
   }
 
   getAttemptedQuizQuestions (language: string, level: string, user: User) {
     const questions: Question[] = []
     firstValueFrom(
       this.db
-        .collection(`users/${user.uid}/solvedQuizzes`)
-        .doc(language)
-        .collection(`Level`)
-        .doc(level)
-        .collection(`questions`)
+        .collection(
+          `users/${user.uid}/solvedQuizzes/${language}/Level/${level}/questions`
+        )
         .snapshotChanges()
         .pipe(
           map(actions =>

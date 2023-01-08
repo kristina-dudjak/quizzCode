@@ -7,10 +7,10 @@
   <mat-progress-bar
     class="progress-bar"
     [mode]="'determinate'"
-    [value]="(attemptedQuiz.score / attemptedQuiz.questions.length) * 100"
+    [value]="(attemptedQuiz.score / attemptedQuiz.totalQuestions) * 100"
   >
   </mat-progress-bar>
-  <p>{{ attemptedQuiz.score }} / {{ attemptedQuiz.questions.length }}</p>
+  <p>{{ attemptedQuiz.score }} / {{ attemptedQuiz.totalQuestions }}</p>
   <div class="quiz-dialog__actions" mat-dialog-actions>
     <button
       class="quiz-dialog__actions__submit"

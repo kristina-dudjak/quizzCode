@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormBuilder } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog'
 import { PageEvent } from '@angular/material/paginator'
 import { ActivatedRoute } from '@angular/router'
@@ -8,8 +7,6 @@ import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
 import { User } from 'src/app/shared/models/User'
-import { StoreService } from 'src/app/shared/services/store.service'
-import { QuizService } from '../../services/quiz.service'
 import { UserService } from '../../services/user.service'
 import { ConfirmSubmitDialogComponent } from '../confirm-submit-dialog/confirm-submit-dialog.component'
 
@@ -21,11 +18,8 @@ import { ConfirmSubmitDialogComponent } from '../confirm-submit-dialog/confirm-s
 export class QuizDefaultComponent implements OnInit {
   constructor (
     private route: ActivatedRoute,
-    private quizService: QuizService,
-    private formBuilder: FormBuilder,
     private userService: UserService,
-    private dialog: MatDialog,
-    private storeService: StoreService
+    private dialog: MatDialog
   ) {}
 
   @Input() user: User
@@ -36,16 +30,10 @@ export class QuizDefaultComponent implements OnInit {
   page: number
   language: string
   level: string
-  // userQuestion: Question = {
-  //   name: '',
-  //   id: '',
-  //   answers: []
-  // }
 
   handlePageEvent (e: PageEvent) {
     this.page = e.pageIndex
     this.index$.next(this.page)
-    // this.userQuestion.answers = []
     this.userService.loadAttemptedQuiz(
       this.language,
       this.level,
@@ -55,30 +43,12 @@ export class QuizDefaultComponent implements OnInit {
     )
   }
 
-  questionForm = this.formBuilder.group({
-    answers: this.formBuilder.array([])
-  })
-
-  onButtonChange (questions: Question[], user: User, answer: Answer) {
-    // this.userQuestion.answers = []
-    this.userService.loadAttemptedQuiz(
-      this.language,
-      this.level,
-      this.user,
-      this.allQuizzes,
-      this.questions
-    )
-    // this.userQuestion.name = questions[this.index$.value].name
-    // this.userQuestion.id = questions[this.index$.value].id
-    // this.userQuestion.answers.push(answer)
-    const answers: Answer[] = []
-    answers.push(answer)
+  onButtonChange (questions: Question[], answer: Answer) {
     this.userService.saveQuizQuestion(
-      // this.userQuestion,,
       {
         name: questions[this.index$.value].name,
         id: questions[this.index$.value].id,
-        answers: answers
+        answers: [answer]
       },
       this.user,
       this.attemptedQuiz
@@ -86,16 +56,12 @@ export class QuizDefaultComponent implements OnInit {
   }
 
   isChecked (question: Question, userQuestions: Question[], answerName: string) {
-    if (
-      userQuestions.length === 0 ||
-      !userQuestions.find(q => q.name === question.name)
+    return userQuestions.some(
+      q =>
+        q.name === question.name &&
+        q.answers.some(ans => ans.name === answerName)
     )
-      return false
-    return userQuestions
-      .find(ques => ques.name === question.name)
-      .answers.some(ans => ans.name === answerName)
   }
-
   confirm () {
     this.dialog.open(ConfirmSubmitDialogComponent)
   }
