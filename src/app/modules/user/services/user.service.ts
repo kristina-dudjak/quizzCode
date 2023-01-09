@@ -98,7 +98,7 @@ export class UserService {
                   .get()
                   .pipe(
                     map(doc => {
-                      if (!doc.exists) {
+                      if (!doc.exists || doc.data()['isCompleted']) {
                         this.saveQuiz(
                           language,
                           level,
@@ -109,15 +109,20 @@ export class UserService {
                       }
                     })
                   )
+              ).then(() =>
+                this.storeService.updateAttemptedQuiz({
+                  name: doc.id,
+                  level: level,
+                  isCompleted: doc.data()['isCompleted'],
+                  thumbnail: allQuizzes.find(quiz => quiz.name === language)
+                    .thumbnail,
+                  questions: this.getAttemptedQuizQuestions(
+                    language,
+                    level,
+                    user
+                  )
+                })
               )
-              this.storeService.updateAttemptedQuiz({
-                name: doc.id,
-                level: level,
-                isCompleted: doc.data()['isCompleted'],
-                thumbnail: allQuizzes.find(quiz => quiz.name === language)
-                  .thumbnail,
-                questions: this.getAttemptedQuizQuestions(language, level, user)
-              })
             }
           })
         )

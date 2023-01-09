@@ -18,6 +18,7 @@
         class="quiz__info__actions__retry"
         mat-button
         *ngIf="solvedQuiz.isCompleted"
+        [routerLink]="[solvedQuiz.name, solvedQuiz.level]"
       >
         Try again
       </button>
@@ -25,6 +26,7 @@
         class="quiz__info__actions__retry"
         mat-button
         *ngIf="!solvedQuiz.isCompleted"
+        [routerLink]="[solvedQuiz.name, solvedQuiz.level]"
       >
         Continue
       </button>
