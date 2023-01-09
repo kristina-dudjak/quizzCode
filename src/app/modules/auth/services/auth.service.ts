@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Router } from '@angular/router'
 import firebase from 'firebase/compat/app'
+import { firstValueFrom, map } from 'rxjs'
 import { StoreService } from 'src/app/shared/services/store.service'
 
 @Injectable({
@@ -17,7 +18,24 @@ export class AuthService {
   ) {
     this.firebaseAuth.onAuthStateChanged(user => {
       this.storeService.updateUserState(user)
+      if (user) this.checkIfAdmin(user)
     })
+  }
+
+  checkIfAdmin (user: firebase.User) {
+    firstValueFrom(
+      this.db
+        .collection('users')
+        .doc(user.uid)
+        .get()
+        .pipe(
+          map(doc => {
+            if (doc.data()['isAdmin']) {
+              this.storeService.updateIsAdminInUser(doc.data()['isAdmin'])
+            }
+          })
+        )
+    )
   }
 
   googleSignIn (rememberMe: boolean) {
@@ -92,7 +110,8 @@ export class AuthService {
     this.db.collection(`users`).doc(user.uid).set(
       {
         uid: user.uid,
-        email: user.email
+        email: user.email,
+        isAdmin: false
       },
       { merge: true }
     )

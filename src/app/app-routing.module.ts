@@ -30,6 +30,12 @@ const routes: Routes = [
     ...canActivate(redirectUnauthorizedToLogin)
   },
   {
+    path: 'admin',
+    loadChildren: () =>
+      import('./modules/admin/admin.module').then(m => m.AdminModule),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
     path: '**',
     pathMatch: 'full',
     component: PageNotFoundComponent

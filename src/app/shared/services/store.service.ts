@@ -54,9 +54,19 @@ export class StoreService extends Store<StoreInterface> {
       this.setState({ user: undefined })
     } else {
       this.setState({
-        user: { uid: user.uid, email: user.email, solvedQuizzes: [] }
+        user: {
+          uid: user.uid,
+          email: user.email,
+          isAdmin: false,
+          solvedQuizzes: []
+        }
       })
     }
+  }
+
+  updateIsAdminInUser (admin: boolean) {
+    const { isAdmin, ...rest } = this.state.user
+    this.setState({ user: { isAdmin: admin, ...rest } })
   }
 
   updateErrorMessageState (errorMessage: string) {

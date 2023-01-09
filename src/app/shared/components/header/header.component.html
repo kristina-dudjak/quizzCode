@@ -3,7 +3,7 @@
     <mat-icon class="header__logo__icon" [svgIcon]="'quiz'"></mat-icon>
     <h2 class="header__logo__name">QuizzCode</h2>
   </div>
-  <div class="header__menu" *ngIf="user$ | async">
+  <div class="header__menu" *ngIf="user">
     <button
       class="header__menu__button"
       mat-icon-button
@@ -13,6 +13,9 @@
     </button>
     <mat-menu class="custom-menu" #menu="matMenu">
       <button mat-menu-item routerLink="/">Quizzes</button>
+      <button mat-menu-item *ngIf="user.isAdmin" routerLink="admin">
+        Admin settings
+      </button>
       <button mat-menu-item (click)="signOut()">Log out</button>
     </mat-menu>
   </div>

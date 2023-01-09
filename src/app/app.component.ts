@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService } from './modules/auth/services/auth.service'
 import { IconsService } from './shared/services/icons.service'
 import { StoreService } from './shared/services/store.service'
 
