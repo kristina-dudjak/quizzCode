@@ -1,0 +1,23 @@
+<div [formGroup]="form">
+  <div formArrayName="questions">
+    <mat-label>Questions</mat-label>
+    <div *ngFor="let question of getQuestions(form); let i = index">
+      <div [formGroupName]="i">
+        <label>Question name</label>
+        <input formControlName="questionName" />
+        <label>Answers</label>
+        <app-answers-input
+          [question]="question"
+          [i]="i"
+          [form]="form"
+        ></app-answers-input>
+      </div>
+      <button type="button" (click)="addQuestion()">
+        + Add another question
+      </button>
+      <span *ngIf="getQuestions(form).length > 1" (click)="removeQuestion(i)"
+        >Remove Question</span
+      >
+    </div>
+  </div>
+</div>

@@ -1,4 +1,7 @@
 .new-quiz {
-  grid-column: 4 / 9;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  justify-items: center;
+  margin-top: 80px;
   background-color: aliceblue;
 }

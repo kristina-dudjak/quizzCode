@@ -6,13 +6,11 @@ import { AdminComponent } from './views/admin/admin.component'
 const routes: Routes = [
   {
     path: '',
-    component: AdminComponent,
-    children: [
-      {
-        path: 'new-quiz',
-        component: NewQuizComponent
-      }
-    ]
+    component: AdminComponent
+  },
+  {
+    path: 'new-quiz',
+    component: NewQuizComponent
   }
 ]
 

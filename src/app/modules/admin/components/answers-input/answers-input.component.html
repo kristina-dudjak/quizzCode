@@ -1,0 +1,20 @@
+<div [formGroup]="question">
+  <div formArrayName="questionAnswers">
+    <div *ngFor="let answer of getQuestionAnswers(question); let j = index">
+      <div [formGroupName]="j">
+        <label>Answer name</label>
+        <input formControlName="answerName" />
+        <label>Answer correct</label>
+        <input formControlName="answerCorrect" />
+        <button type="button" (click)="addQuestionAnswer(i)">
+          + Add another answer
+        </button>
+        <span
+          *ngIf="getQuestionAnswers(question).length > 1"
+          (click)="removeQuestionAnswer(i)"
+          >Remove Question Answer</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
