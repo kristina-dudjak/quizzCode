@@ -1,11 +1,18 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { BlaComponent } from './components/bla/bla.component'
+import { NewQuizComponent } from './components/new-quiz/new-quiz.component'
+import { AdminComponent } from './views/admin/admin.component'
 
 const routes: Routes = [
   {
-    path: 'admin',
-    component: BlaComponent
+    path: '',
+    component: AdminComponent,
+    children: [
+      {
+        path: 'new-quiz',
+        component: NewQuizComponent
+      }
+    ]
   }
 ]
 

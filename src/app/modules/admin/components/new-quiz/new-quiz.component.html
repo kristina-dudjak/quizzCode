@@ -1,0 +1,72 @@
+<div class="new-quiz">
+  <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Quiz language name</mat-label>
+      <input
+        matInput
+        placeholder="Ex. Java"
+        required
+        type="text"
+        formControlName="language"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Quiz image url</mat-label>
+      <input
+        matInput
+        placeholder="Ex. https://.../.png"
+        required
+        type="text"
+        formControlName="thumbnail"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Quiz level</mat-label>
+      <input
+        matInput
+        placeholder="Ex. Easy"
+        required
+        type="text"
+        formControlName="level"
+      />
+    </mat-form-field>
+    <div formArrayName="questions">
+      <mat-label>Questions</mat-label>
+      <div *ngFor="let question of getQuestions(quizForm); let i = index">
+        <div [formGroupName]="i">
+          <label>Question name</label>
+          <input formControlName="questionName" />
+          <label>Answers</label>
+          <div formArrayName="questionAnswers">
+            <div
+              *ngFor="let answer of getQuestionAnswers(question); let j = index"
+            >
+              <div [formGroupName]="j">
+                <label>Answer name</label>
+                <input formControlName="answerName" />
+                <label>Answer correct</label>
+                <input formControlName="answerCorrect" />
+                <button type="button" (click)="addQuestionAnswer(i)">
+                  + Add another answer
+                </button>
+                <span
+                  *ngIf="getQuestionAnswers(question).length > 1"
+                  (click)="removeQuestionAnswer(i)"
+                  >Remove Question Answer</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" (click)="addQuestion()">
+          + Add another question
+        </button>
+        <span
+          *ngIf="getQuestions(quizForm).length > 1"
+          (click)="removeQuestion(i)"
+          >Remove Question</span
+        >
+      </div>
+    </div>
+  </form>
+</div>

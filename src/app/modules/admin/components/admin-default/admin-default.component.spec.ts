@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BlaComponent } from './bla.component';
+import { AdminDefaultComponent } from './admin-default.component';
 
-describe('BlaComponent', () => {
-  let component: BlaComponent;
-  let fixture: ComponentFixture<BlaComponent>;
+describe('AdminDefaultComponent', () => {
+  let component: AdminDefaultComponent;
+  let fixture: ComponentFixture<AdminDefaultComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BlaComponent ]
+      declarations: [ AdminDefaultComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BlaComponent);
+    fixture = TestBed.createComponent(AdminDefaultComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
