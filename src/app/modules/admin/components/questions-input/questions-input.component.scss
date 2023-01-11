@@ -1,0 +1,18 @@
+.form {
+  &__array {
+    &__label {
+      margin-bottom: 24px;
+    }
+    &__questions {
+      margin-left: 42px;
+
+      &__group {
+        display: flex;
+        flex-direction: column;
+        &__answers {
+          margin-left: 24px;
+        }
+      }
+    }
+  }
+}

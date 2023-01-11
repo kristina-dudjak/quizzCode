@@ -1,20 +1,28 @@
-<div [formGroup]="question">
-  <div formArrayName="questionAnswers">
-    <div *ngFor="let answer of getQuestionAnswers(question); let j = index">
-      <div [formGroupName]="j">
-        <label>Answer name</label>
-        <input formControlName="answerName" />
-        <label>Answer correct</label>
-        <input formControlName="answerCorrect" />
-        <button type="button" (click)="addQuestionAnswer(i)">
-          + Add another answer
-        </button>
-        <span
-          *ngIf="getQuestionAnswers(question).length > 1"
-          (click)="removeQuestionAnswer(i)"
-          >Remove Question Answer</span
-        >
-      </div>
+<div class="question" [formGroup]="question">
+  <div
+    class="question__answers"
+    formArrayName="questionAnswers"
+    *ngFor="let answer of getQuestionAnswers(question); let j = index"
+  >
+    <div [formGroupName]="j">
+      <mat-form-field appearance="outline">
+        <mat-label>Answer name</mat-label>
+        <input matInput formControlName="answerName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Answer correct</mat-label>
+        <input matInput formControlName="answerCorrect" />
+      </mat-form-field>
+      <button
+        *ngIf="getQuestionAnswers(question).length > 1"
+        mat-icon-button
+        (click)="removeQuestionAnswer(i)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </div>
+  <button mat-icon-button (click)="addQuestionAnswer(i)">
+    <mat-icon>note_add</mat-icon>
+  </button>
 </div>

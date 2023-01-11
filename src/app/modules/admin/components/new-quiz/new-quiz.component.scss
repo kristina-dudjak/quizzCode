@@ -1,7 +1,12 @@
 .new-quiz {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  justify-items: center;
+  justify-items: stretch;
   margin-top: 80px;
   background-color: aliceblue;
+
+  &__field,
+  &__questions {
+    grid-column: 2 / 12;
+  }
 }
