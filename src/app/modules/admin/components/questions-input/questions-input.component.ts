@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core'
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms'
+import { FormArray, FormGroup } from '@angular/forms'
+import { Output, EventEmitter } from '@angular/core'
 
 @Component({
   selector: 'app-questions-input',
@@ -7,23 +8,17 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms'
   styleUrls: ['./questions-input.component.scss']
 })
 export class QuestionsInputComponent {
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   @Input() form: FormGroup
-  @Input() initQuestionAnswers: () => void
+  @Output() newEvent = new EventEmitter()
 
   getQuestions(form) {
     return form.controls.questions.controls
   }
 
   addQuestion() {
-    const control = <FormArray>this.form.get('questions')
-    control.push(
-      this.fb.group({
-        questionName: [''],
-        questionAnswers: this.initQuestionAnswers()
-      })
-    )
+    this.newEvent.emit()
   }
 
   removeQuestion(i: number) {

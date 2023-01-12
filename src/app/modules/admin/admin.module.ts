@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MatDividerModule } from '@angular/material/divider'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
+import { MatCheckboxModule } from '@angular/material/checkbox'
 
 import { AdminComponent } from './views/admin/admin.component'
 import { AdminDefaultComponent } from './components/admin-default/admin-default.component'
@@ -30,7 +31,8 @@ import { AnswersInputComponent } from './components/answers-input/answers-input.
     ReactiveFormsModule,
     MatDividerModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatCheckboxModule
   ]
 })
 export class AdminModule {}

@@ -1,4 +1,4 @@
-<form class="new-quiz" [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+<form class="new-quiz" [formGroup]="quizForm">
   <mat-form-field class="new-quiz__field" appearance="outline">
     <mat-label>Quiz language name</mat-label>
     <input
@@ -32,7 +32,15 @@
   <app-questions-input
     class="new-quiz__questions"
     [form]="quizForm"
-    [initQuestionAnswers]="initQuestionAnswers"
+    (newEvent)="addQuestion()"
   ></app-questions-input>
+  <button
+    class="new-quiz__submit"
+    mat-raised-button
+    type="submit"
+    [disabled]="!quizForm.valid"
+    (click)="onSubmit()"
+  >
+    Submit
+  </button>
 </form>
-<button (click)="getStuff()">Ispis</button>

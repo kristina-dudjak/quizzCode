@@ -4,15 +4,17 @@
     formArrayName="questionAnswers"
     *ngFor="let answer of getQuestionAnswers(question); let j = index"
   >
-    <div [formGroupName]="j">
-      <mat-form-field appearance="outline">
+    <div class="question__answers__inputs" [formGroupName]="j">
+      <mat-form-field
+        class="question__answers__inputs__answer"
+        appearance="outline"
+      >
         <mat-label>Answer name</mat-label>
         <input matInput formControlName="answerName" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Answer correct</mat-label>
-        <input matInput formControlName="answerCorrect" />
-      </mat-form-field>
+      <mat-checkbox class="checked-color" formControlName="answerCorrect"
+        >Correct</mat-checkbox
+      >
       <button
         *ngIf="getQuestionAnswers(question).length > 1"
         mat-icon-button

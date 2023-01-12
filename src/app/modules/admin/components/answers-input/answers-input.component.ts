@@ -22,7 +22,7 @@ export class AnswersInputComponent {
     answers.push(
       this.fb.group({
         answerName: [''],
-        answerCorrect: ['']
+        answerCorrect: [false]
       })
     )
   }

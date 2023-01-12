@@ -3,10 +3,14 @@
   grid-template-columns: repeat(12, 1fr);
   justify-items: stretch;
   margin-top: 80px;
-  background-color: aliceblue;
 
   &__field,
-  &__questions {
-    grid-column: 2 / 12;
+  &__questions,
+  &__submit {
+    grid-column: 4 / 10;
+  }
+
+  &__submit {
+    margin: 24px 0;
   }
 }

@@ -6,8 +6,11 @@
       *ngFor="let question of getQuestions(form); let i = index"
     >
       <div class="form__array__questions__group" [formGroupName]="i">
-        <div>
-          <mat-form-field class="new-quiz__field" appearance="outline">
+        <div class="form__array__questions__group__question">
+          <mat-form-field
+            class="form__array__questions__group__question__field"
+            appearance="outline"
+          >
             <mat-label>Question {{ i }}</mat-label>
             <input
               matInput
@@ -17,8 +20,8 @@
             />
           </mat-form-field>
           <button
+            class="form__array__questions__group__question__remove"
             mat-icon-button
-            *ngIf="getQuestions(form).length > 1"
             (click)="removeQuestion(i)"
           >
             <mat-icon>delete</mat-icon>
@@ -33,7 +36,6 @@
             [form]="form"
           ></app-answers-input>
         </div>
-        <mat-divider></mat-divider>
       </div>
     </div>
   </div>
