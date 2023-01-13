@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Quiz } from 'src/app/shared/models/Quiz'
+import { User } from 'src/app/shared/models/User'
+import { QuizService } from 'src/app/shared/services/quiz.service'
 import { StoreService } from 'src/app/shared/services/store.service'
-import { QuizService } from '../../services/quiz.service'
 import { QuizLevelDialogComponent } from '../quiz-level-dialog/quiz-level-dialog.component'
 
 @Component({
@@ -18,6 +19,7 @@ export class AvailableQuizComponent {
   ) {}
 
   @Input() availableQuiz: Quiz
+  @Input() user: User
 
   chooseLevel () {
     this.storeService.updateAttemptedQuiz({
@@ -27,6 +29,6 @@ export class AvailableQuizComponent {
       questions: []
     })
     this.quizService.loadQuizLevels(this.availableQuiz.name)
-    this.dialog.open(QuizLevelDialogComponent)
+    this.dialog.open(QuizLevelDialogComponent, { data: this.user.isAdmin })
   }
 }

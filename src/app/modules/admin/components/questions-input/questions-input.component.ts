@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectorRef, Component, Input } from '@angular/core'
 import { FormArray, FormGroup } from '@angular/forms'
 import { Output, EventEmitter } from '@angular/core'
 
@@ -8,7 +8,7 @@ import { Output, EventEmitter } from '@angular/core'
   styleUrls: ['./questions-input.component.scss']
 })
 export class QuestionsInputComponent {
-  constructor() {}
+  constructor(private cd: ChangeDetectorRef) {}
 
   @Input() form: FormGroup
   @Output() newEvent = new EventEmitter()
@@ -19,6 +19,7 @@ export class QuestionsInputComponent {
 
   addQuestion() {
     this.newEvent.emit()
+    this.cd.detectChanges()
   }
 
   removeQuestion(i: number) {

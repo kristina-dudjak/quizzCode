@@ -8,12 +8,14 @@ import { MatDividerModule } from '@angular/material/divider'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
 import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatCardModule } from '@angular/material/card'
 
 import { AdminComponent } from './views/admin/admin.component'
 import { AdminDefaultComponent } from './components/admin-default/admin-default.component'
 import { NewQuizComponent } from './components/new-quiz/new-quiz.component'
 import { QuestionsInputComponent } from './components/questions-input/questions-input.component'
 import { AnswersInputComponent } from './components/answers-input/answers-input.component'
+import { NewQuizDefaultComponent } from './components/new-quiz-default/new-quiz-default.component'
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { AnswersInputComponent } from './components/answers-input/answers-input.
     AdminDefaultComponent,
     NewQuizComponent,
     QuestionsInputComponent,
-    AnswersInputComponent
+    AnswersInputComponent,
+    NewQuizDefaultComponent
   ],
   imports: [
     CommonModule,
@@ -32,6 +35,7 @@ import { AnswersInputComponent } from './components/answers-input/answers-input.
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
+    MatCardModule,
     MatCheckboxModule
   ]
 })

@@ -14,7 +14,7 @@
       class="quiz-dialog__levels__level button-checked"
       *ngFor="let level of levels"
       value="level"
-      (click)="updateLevel(level)"
+      (click)="updateLevel(level, attemptedQuiz.name)"
     >
       {{ level }}</mat-button-toggle
     >
@@ -29,6 +29,15 @@
       [routerLink]="['quizzes', attemptedQuiz.name, attemptedQuiz.level]"
     >
       Start
+    </button>
+    <button
+      class="quiz-dialog__actions__close"
+      *ngIf="data.valueOf()"
+      mat-button
+      mat-dialog-close
+      [routerLink]="['admin']"
+    >
+      Edit
     </button>
     <button class="quiz-dialog__actions__close" mat-button mat-dialog-close>
       Close

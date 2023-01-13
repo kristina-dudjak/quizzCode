@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
+import { QuizService } from 'src/app/shared/services/quiz.service'
 import { StoreService } from 'src/app/shared/services/store.service'
-import { QuizService } from '../../services/quiz.service'
 
 @Component({
   selector: 'app-quizzes-default',

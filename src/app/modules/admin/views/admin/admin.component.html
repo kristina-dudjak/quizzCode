@@ -1,3 +1,7 @@
 <div *ngIf="user$ | async as user">
-  <app-admin-default [user]="user"></app-admin-default>
+  <app-admin-default
+    *ngIf="attemptedQuiz$ | async as attemptedQuiz"
+    [user]="user"
+    [attemptedQuiz]="attemptedQuiz"
+  ></app-admin-default>
 </div>

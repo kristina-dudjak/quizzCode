@@ -9,4 +9,5 @@ import { StoreService } from 'src/app/shared/services/store.service'
 export class AdminComponent {
   constructor (private storeService: StoreService) {}
   user$ = this.storeService.user$
+  attemptedQuiz$ = this.storeService.attemptedQuiz$
 }

@@ -60,13 +60,13 @@ export class QuizService {
     )
     this.storeService.updateLevelsState(levels)
   }
-
   initialQuestionsLoad (language: string, level: string) {
     const questions: Question[] = []
     firstValueFrom(
       this.db
         .collection(
-          `quizzes/${language}/Level/${level}/multipleChoiceQuestions`
+          `quizzes/${language}/Level/${level}/multipleChoiceQuestions`,
+          ref => ref.orderBy('id')
         )
         .snapshotChanges()
         .pipe(
