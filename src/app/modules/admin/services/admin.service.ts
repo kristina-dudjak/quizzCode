@@ -23,8 +23,8 @@ export class AdminService {
         .collection(
           `quizzes/${newQuiz.name}/Level/${newQuiz.level}/multipleChoiceQuestions`
         )
-        .doc(question.id)
-        .set({ name: question.name }, { merge: true })
+        .doc(question.id.toString())
+        .set({ name: question.name, id: question.id }, { merge: true })
       question.answers.forEach(answer => {
         this.db
           .collection(

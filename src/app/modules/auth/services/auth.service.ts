@@ -107,13 +107,22 @@ export class AuthService {
   }
 
   saveUserToDb (user: firebase.User) {
-    this.db.collection(`users`).doc(user.uid).set(
-      {
-        uid: user.uid,
-        email: user.email,
-        isAdmin: false
-      },
-      { merge: true }
-    )
+    this.db
+      .collection(`users`)
+      .doc(user.uid)
+      .get()
+      .pipe(
+        map(doc => {
+          if (doc.exists) return
+          this.db.collection(`users`).doc(user.uid).set(
+            {
+              uid: user.uid,
+              email: user.email,
+              isAdmin: false
+            },
+            { merge: true }
+          )
+        })
+      )
   }
 }

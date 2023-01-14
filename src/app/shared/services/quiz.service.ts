@@ -42,7 +42,7 @@ export class QuizService {
     const levels = []
     firstValueFrom(
       this.db
-        .collection(`quizzes/${language}/Level`, ref => ref.orderBy('id'))
+        .collection(`quizzes/${language}/Level`)
         .snapshotChanges()
         .pipe(
           map(actions =>
@@ -74,7 +74,7 @@ export class QuizService {
             actions.map(
               ({ payload: { doc } }: DocumentChangeAction<unknown>) => {
                 questions.push({
-                  id: doc.id,
+                  id: doc.data()['id'],
                   name: doc.data()['name'],
                   answers: this.getAnswers(language, level, doc.id)
                 })

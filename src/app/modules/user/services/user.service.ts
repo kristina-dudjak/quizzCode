@@ -235,7 +235,7 @@ export class UserService {
             actions.map(
               ({ payload: { doc } }: DocumentChangeAction<unknown>) => {
                 questions.push({
-                  id: doc.id,
+                  id: doc.data()['id'],
                   name: doc.data()['name'],
                   answers: doc.data()['answers']
                 })

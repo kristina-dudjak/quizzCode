@@ -1,7 +1,7 @@
 import { Answer } from './Answer'
 
 export interface Question {
-  id: string
+  id: number
   name: string
   answers: Answer[]
 }

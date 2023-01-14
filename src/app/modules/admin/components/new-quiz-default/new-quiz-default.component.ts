@@ -102,7 +102,7 @@ export class NewQuizDefaultComponent implements OnInit {
       quest.push({
         name: question.questionName,
         answers: answers,
-        id: this.quizForm.value.questions.indexOf(question).toString()
+        id: this.quizForm.value.questions.indexOf(question)
       })
     })
     const quiz: Quiz = {
