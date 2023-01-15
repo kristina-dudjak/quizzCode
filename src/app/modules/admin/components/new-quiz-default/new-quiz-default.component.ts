@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { FormBuilder, FormArray } from '@angular/forms'
+import { Router } from '@angular/router'
 import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
@@ -11,7 +12,11 @@ import { AdminService } from '../../services/admin.service'
   styleUrls: ['./new-quiz-default.component.scss']
 })
 export class NewQuizDefaultComponent implements OnInit {
-  constructor(private fb: FormBuilder, private adminService: AdminService) {}
+  constructor(
+    private fb: FormBuilder,
+    private adminService: AdminService,
+    private router: Router
+  ) {}
   @Input() questions: Question[]
   @Input() attemptedQuiz: AttemptedQuiz
   quizForm = this.fb.group({
@@ -87,7 +92,12 @@ export class NewQuizDefaultComponent implements OnInit {
     )
   }
 
-  onSubmit() {
+  async deleteQuiz(attemptedQuiz: Quiz, questions: Question[]) {
+    await this.adminService.deleteAttemptedQuiz(attemptedQuiz, questions)
+    this.router.navigateByUrl('quizzes')
+  }
+
+  async onSubmit() {
     const { thumbnail, language, level, questions } = this.quizForm.value
     const quest: Question[] = []
     questions.forEach(question => {
@@ -111,6 +121,11 @@ export class NewQuizDefaultComponent implements OnInit {
       level: level,
       questions: quest
     }
-    this.adminService.saveNewQuizToDb(quiz)
+    await this.adminService.saveNewQuizToDb(
+      quiz,
+      this.attemptedQuiz,
+      this.questions
+    )
+    this.router.navigateByUrl('quizzes')
   }
 }

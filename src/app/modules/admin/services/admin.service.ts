@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
+import { Question } from 'src/app/shared/models/Question'
 import { Quiz } from 'src/app/shared/models/Quiz'
 
 @Injectable({
@@ -8,8 +9,12 @@ import { Quiz } from 'src/app/shared/models/Quiz'
 export class AdminService {
   constructor (private db: AngularFirestore) {}
 
-  saveNewQuizToDb (newQuiz: Quiz) {
-    console.log(newQuiz)
+  async saveNewQuizToDb (
+    newQuiz: Quiz,
+    attemptedQuiz: Quiz,
+    questions: Question[]
+  ) {
+    if (attemptedQuiz) await this.deleteAttemptedQuiz(attemptedQuiz, questions)
     this.db
       .collection('quizzes')
       .doc(newQuiz.name)
@@ -34,5 +39,33 @@ export class AdminService {
           .set({ name: answer.name, correct: answer.correct }, { merge: true })
       })
     })
+  }
+
+  async deleteAttemptedQuiz (quiz: Quiz, questions: Question[]) {
+    questions.forEach(async question => {
+      const qry: firebase.default.firestore.QuerySnapshot = await this.db
+        .collection(
+          `quizzes/${quiz.name}/Level/${quiz.level}/multipleChoiceQuestions/${question.id}/answers`
+        )
+        .ref.get()
+      qry.forEach(doc => {
+        doc.ref.delete()
+      })
+    })
+    const quest: firebase.default.firestore.QuerySnapshot = await this.db
+      .collection(
+        `quizzes/${quiz.name}/Level/${quiz.level}/multipleChoiceQuestions`
+      )
+      .ref.get()
+    quest.forEach(doc => {
+      doc.ref.delete()
+    })
+    this.db.doc(`quizzes/${quiz.name}/Level/${quiz.level}`).delete()
+    const level: firebase.default.firestore.QuerySnapshot = await this.db
+      .collection(`quizzes/${quiz.name}/Level`)
+      .ref.get()
+    if (level.empty) {
+      this.db.doc(`quizzes/${quiz.name}`).delete()
+    }
   }
 }
