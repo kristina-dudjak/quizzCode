@@ -1,5 +1,10 @@
-<div *ngIf="user && user.solvedQuizzes && user.solvedQuizzes.length !== 0">
-  <h2 class="quizzes__title">Solved</h2>
+<div *ngIf="user">
+  <h2
+    class="quizzes__title"
+    *ngIf="(user.solvedQuizzes | solvedQuizzes: true).length !== 0"
+  >
+    Solved
+  </h2>
   <ul class="solved-quizzes">
     <li
       class="solved-quizzes__quiz"

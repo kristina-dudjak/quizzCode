@@ -37,17 +37,17 @@ export class UserService {
               }
             )
           ),
-          tap(() => {
-            this.getAllUserQuizzes(user, quizzes)
+          tap(async () => {
+            await this.getAllUserQuizzes(user, quizzes)
           })
         )
     )
   }
 
-  getAllUserQuizzes (user: User, quizzes: AttemptedQuiz[]) {
+  async getAllUserQuizzes (user: User, quizzes: AttemptedQuiz[]) {
     const allQuizzes: AttemptedQuiz[] = []
-    quizzes.forEach(quiz => {
-      firstValueFrom(
+    for (const quiz of quizzes) {
+      await firstValueFrom(
         this.db
           .collection(`users/${user.uid}/solvedQuizzes/${quiz.name}/Level`)
           .snapshotChanges()
@@ -68,8 +68,9 @@ export class UserService {
               )
             )
           )
-      ).then(() => this.storeService.updateUserQuizzes(allQuizzes))
-    })
+      )
+    }
+    this.storeService.updateUserQuizzes(allQuizzes)
   }
 
   loadAttemptedQuiz (

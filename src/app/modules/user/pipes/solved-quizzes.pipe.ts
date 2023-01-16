@@ -5,9 +5,7 @@ import { AttemptedQuiz } from 'src/app/shared/models/Quiz'
   name: 'solvedQuizzes'
 })
 export class SolvedQuizzesPipe implements PipeTransform {
-  transform (quizzes: AttemptedQuiz[], completed: boolean): AttemptedQuiz[] {
-    return completed
-      ? quizzes.filter(quizzes => quizzes.isCompleted)
-      : quizzes.filter(quizzes => !quizzes.isCompleted)
+  transform (quizzes: AttemptedQuiz[], completed: Boolean): AttemptedQuiz[] {
+    return quizzes.filter(quizzes => quizzes.isCompleted === completed)
   }
 }
