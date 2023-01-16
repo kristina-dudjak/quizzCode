@@ -31,4 +31,8 @@ export class AvailableQuizComponent {
     this.quizService.loadQuizLevels(this.availableQuiz.name)
     this.dialog.open(QuizLevelDialogComponent, { data: this.user.isAdmin })
   }
+
+  setDefaultImg () {
+    this.availableQuiz.thumbnail = 'assets/not-found.png'
+  }
 }

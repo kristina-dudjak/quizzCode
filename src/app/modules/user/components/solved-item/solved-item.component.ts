@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { AttemptedQuiz } from 'src/app/shared/models/Quiz'
 
 @Component({
@@ -6,10 +6,10 @@ import { AttemptedQuiz } from 'src/app/shared/models/Quiz'
   templateUrl: './solved-item.component.html',
   styleUrls: ['./solved-item.component.scss']
 })
-export class SolvedItemComponent implements OnInit {
-  constructor () {}
-
+export class SolvedItemComponent {
   @Input() solvedQuiz: AttemptedQuiz
 
-  ngOnInit (): void {}
+  setDefaultImg () {
+    this.solvedQuiz.thumbnail = 'assets/not-found.png'
+  }
 }

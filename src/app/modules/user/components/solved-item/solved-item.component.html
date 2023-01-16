@@ -1,5 +1,10 @@
 <mat-card class="quiz">
-  <img class="quiz_img" mat-card-sm-image [src]="solvedQuiz.thumbnail" />
+  <img
+    class="quiz_img"
+    mat-card-sm-image
+    [src]="solvedQuiz.thumbnail"
+    (error)="setDefaultImg()"
+  />
   <div class="quiz__info">
     <mat-card-title class="quiz__info__name">{{
       solvedQuiz.name
