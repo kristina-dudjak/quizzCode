@@ -73,104 +73,81 @@ export class UserService {
     this.storeService.updateUserQuizzes(allQuizzes)
   }
 
-  loadAttemptedQuiz (
+  async loadAttemptedQuiz (
     language: string,
     level: string,
     user: User,
     allQuizzes: Quiz[],
     questions: Question[]
   ) {
-    firstValueFrom(
-      this.db
-        .collection(`users/${user.uid}/solvedQuizzes`)
-        .doc(language)
-        .get()
-        .pipe(
-          map(doc => {
-            if (!doc.exists) {
-              this.saveQuiz(language, level, user, allQuizzes, questions)
-            } else {
-              firstValueFrom(
-                this.db
-                  .collection(
-                    `users/${user.uid}/solvedQuizzes/${language}/Level`
-                  )
-                  .doc(level)
-                  .get()
-                  .pipe(
-                    map(doc => {
-                      if (!doc.exists || doc.data()['isCompleted']) {
-                        this.saveQuiz(
-                          language,
-                          level,
-                          user,
-                          allQuizzes,
-                          questions
-                        )
-                      }
-                    })
-                  )
-              ).then(() =>
-                this.storeService.updateAttemptedQuiz({
-                  name: doc.id,
-                  level: level,
-                  isCompleted: doc.data()['isCompleted'],
-                  thumbnail: allQuizzes.find(quiz => quiz.name === language)
-                    .thumbnail,
-                  questions: this.getAttemptedQuizQuestions(
-                    language,
-                    level,
-                    user
-                  )
-                })
-              )
-            }
-          })
-        )
-    )
+    let quizRef = this.db
+      .collection(`users/${user.uid}/solvedQuizzes`)
+      .doc(language).ref
+    let quizDoc = await quizRef.get()
+    if (!quizDoc.exists) {
+      await this.saveQuiz(language, level, user, allQuizzes, questions)
+    } else {
+      let levelRef = quizRef.collection('Level').doc(level)
+      let levelDoc = await levelRef.get()
+      if (!levelDoc.exists || levelDoc.data()['isCompleted']) {
+        await this.saveQuiz(language, level, user, allQuizzes, questions)
+      }
+      let quizThumbnail = allQuizzes.find(
+        quiz => quiz.name === language
+      ).thumbnail
+      this.storeService.updateAttemptedQuiz({
+        name: quizDoc.id,
+        level: level,
+        isCompleted: levelDoc.data()['isCompleted'],
+        thumbnail: quizThumbnail,
+        questions: await this.getAttemptedQuizQuestions(language, level, user)
+      })
+    }
   }
 
-  saveQuiz (
+  async saveQuiz (
     language: string,
     level: string,
     user: User,
     allQuizzes: Quiz[],
     questions: Question[]
   ) {
-    this.db
+    const thumbnail = allQuizzes.find(quiz => quiz.name === language).thumbnail
+    const batch = this.db.firestore.batch()
+    const quizRef = this.db
       .collection(`users/${user.uid}/solvedQuizzes`)
-      .doc(language)
-      .set(
-        {
-          name: language,
-          thumbnail: allQuizzes.find(quiz => quiz.name === language).thumbnail
-        },
+      .doc(language).ref
+    batch.set(
+      quizRef,
+      { name: language, thumbnail: thumbnail },
+      { merge: true }
+    )
+    const levelRef = quizRef.collection('Level').doc(level)
+    batch.set(
+      levelRef,
+      { score: 0, totalQuestions: questions.length, isCompleted: false },
+      { merge: true }
+    )
+    for (const question of questions) {
+      const questionRef = levelRef.collection('questions').doc(question.name)
+      batch.set(
+        questionRef,
+        { name: question.name, answers: [] },
         { merge: true }
       )
-    this.db
-      .collection(`users/${user.uid}/solvedQuizzes/${language}/Level`)
-      .doc(level)
-      .set(
-        { score: 0, totalQuestions: questions.length, isCompleted: false },
-        { merge: true }
-      )
-    questions.forEach(question => {
-      this.db
-        .collection(
-          `users/${user.uid}/solvedQuizzes/${language}/Level/${level}/questions`
-        )
-        .doc(question.name)
-        .set({ name: question.name, answers: [] }, { merge: true })
-        .then(() => {
-          this.storeService.updateAttemptedQuiz({
-            name: language,
-            level: level,
-            isCompleted: false,
-            thumbnail: allQuizzes.find(quiz => quiz.name === language)
-              .thumbnail,
-            questions: this.getAttemptedQuizQuestions(language, level, user)
-          })
-        })
+    }
+    await batch.commit()
+    const attemptedQuizQuestions = this.getAttemptedQuizQuestions(
+      language,
+      level,
+      user
+    )
+    this.storeService.updateAttemptedQuiz({
+      name: language,
+      level: level,
+      isCompleted: false,
+      thumbnail: thumbnail,
+      questions: await attemptedQuizQuestions
     })
   }
 
@@ -179,7 +156,6 @@ export class UserService {
     user: User,
     attemptedQuiz: AttemptedQuiz
   ) {
-    const ans = question.answers
     this.db
       .collection(
         `users/${user.uid}/solvedQuizzes/${attemptedQuiz.name}/Level/${attemptedQuiz.level}/questions`
@@ -188,17 +164,17 @@ export class UserService {
       .set(
         {
           name: question.name,
-          answers: ans
+          answers: question.answers
         },
         { merge: true }
       )
-      .then(() => {
+      .then(async () => {
         this.storeService.updateAttemptedQuiz({
           name: attemptedQuiz.name,
           level: attemptedQuiz.level,
           thumbnail: attemptedQuiz.thumbnail,
           isCompleted: false,
-          questions: this.getAttemptedQuizQuestions(
+          questions: await this.getAttemptedQuizQuestions(
             attemptedQuiz.name,
             attemptedQuiz.level,
             user
@@ -223,9 +199,9 @@ export class UserService {
     this.storeService.updateCompletionInAttemptedQuiz(true)
   }
 
-  getAttemptedQuizQuestions (language: string, level: string, user: User) {
+  async getAttemptedQuizQuestions (language: string, level: string, user: User) {
     const questions: Question[] = []
-    firstValueFrom(
+    await firstValueFrom(
       this.db
         .collection(
           `users/${user.uid}/solvedQuizzes/${language}/Level/${level}/questions`

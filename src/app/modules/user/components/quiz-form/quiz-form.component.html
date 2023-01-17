@@ -1,0 +1,15 @@
+<form *ngIf="attemptedQuiz && attemptedQuiz.questions.length !== 0">
+  <h3>{{ questions[index].name }}</h3>
+  <h4>Choose one answer:</h4>
+  <label *ngFor="let answer of questions[index].answers">
+    <input
+      type="radio"
+      [value]="answer.name"
+      [checked]="
+        isChecked(questions[index], attemptedQuiz.questions, answer.name)
+      "
+      (change)="onButtonChange(questions, answer)"
+    />
+    {{ answer.name }}
+  </label>
+</form>

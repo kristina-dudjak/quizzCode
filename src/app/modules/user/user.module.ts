@@ -22,12 +22,12 @@ import { AvailableQuizComponent } from './components/available-quiz/available-qu
 import { QuizLevelDialogComponent } from './components/quiz-level-dialog/quiz-level-dialog.component'
 import { QuizComponent } from './views/quiz/quiz.component'
 import { QuizzesDefaultComponent } from './components/quizzes-default/quizzes-default.component'
-import { QuestionItemComponent } from './components/question-item/question-item.component'
 import { IsAnswerCheckedPipe } from './pipes/is-answer-checked.pipe'
 import { ConfirmSubmitDialogComponent } from './components/confirm-submit-dialog/confirm-submit-dialog.component'
 import { QuizResultDialogComponent } from './components/quiz-result-dialog/quiz-result-dialog.component'
 import { QuizDefaultComponent } from './components/quiz-default/quiz-default.component'
 import { SolvedQuizzesPipe } from './pipes/solved-quizzes.pipe'
+import { QuizFormComponent } from './components/quiz-form/quiz-form.component'
 
 @NgModule({
   declarations: [
@@ -39,12 +39,12 @@ import { SolvedQuizzesPipe } from './pipes/solved-quizzes.pipe'
     QuizLevelDialogComponent,
     QuizComponent,
     QuizzesDefaultComponent,
-    QuestionItemComponent,
     IsAnswerCheckedPipe,
     ConfirmSubmitDialogComponent,
     QuizResultDialogComponent,
     QuizDefaultComponent,
-    SolvedQuizzesPipe
+    SolvedQuizzesPipe,
+    QuizFormComponent
   ],
   imports: [
     CommonModule,

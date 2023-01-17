@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog'
 import { PageEvent } from '@angular/material/paginator'
 import { ActivatedRoute } from '@angular/router'
 import { BehaviorSubject } from 'rxjs'
-import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
 import { User } from 'src/app/shared/models/User'
@@ -32,8 +31,6 @@ export class QuizDefaultComponent implements OnInit {
   level: string
 
   handlePageEvent (e: PageEvent) {
-    this.page = e.pageIndex
-    this.index$.next(this.page)
     this.userService.loadAttemptedQuiz(
       this.language,
       this.level,
@@ -41,27 +38,10 @@ export class QuizDefaultComponent implements OnInit {
       this.allQuizzes,
       this.questions
     )
+    this.page = e.pageIndex
+    this.index$.next(this.page)
   }
 
-  onButtonChange (questions: Question[], answer: Answer) {
-    this.userService.saveQuizQuestion(
-      {
-        name: questions[this.index$.value].name,
-        id: questions[this.index$.value].id,
-        answers: [answer]
-      },
-      this.user,
-      this.attemptedQuiz
-    )
-  }
-
-  isChecked (question: Question, userQuestions: Question[], answerName: string) {
-    return userQuestions.some(
-      q =>
-        q.name === question.name &&
-        q.answers.some(ans => ans.name === answerName)
-    )
-  }
   confirm () {
     this.dialog.open(ConfirmSubmitDialogComponent)
   }
