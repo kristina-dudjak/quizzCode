@@ -9,6 +9,6 @@ export interface Quiz {
 
 export interface AttemptedQuiz extends Quiz {
   score?: number
-  totalQuestions?: number
+  maxScore?: number
   isCompleted: boolean
 }

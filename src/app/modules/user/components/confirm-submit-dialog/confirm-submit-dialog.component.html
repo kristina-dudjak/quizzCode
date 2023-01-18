@@ -2,20 +2,13 @@
   <h3 class="quiz-dialog__title" mat-dialog-title>
     Are you sure you want to finish?
   </h3>
-  <div
-    class="quiz-dialog__actions"
-    mat-dialog-actions
-    *ngIf="(user$ | async) && (user$ | async) as user"
-  >
+  <div class="quiz-dialog__actions" mat-dialog-actions>
     <button
       class="quiz-dialog__actions__submit"
       mat-button
       mat-dialog-close
-      *ngIf="
-        (attemptedQuiz$ | async) && (attemptedQuiz$ | async) as attemptedQuiz
-      "
       type="submit"
-      (click)="showResult(attemptedQuiz, user)"
+      (click)="showResult()"
     >
       Yes
     </button>

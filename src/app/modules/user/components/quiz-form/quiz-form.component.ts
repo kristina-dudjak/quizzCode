@@ -18,16 +18,28 @@ export class QuizFormComponent {
   @Input() index: number
   @Input() questions: Question[]
 
-  onButtonChange (questions: Question[], answer: Answer) {
-    this.userService.saveQuizQuestion(
-      {
-        name: questions[this.index].name,
-        id: questions[this.index].id,
-        answers: [answer]
-      },
-      this.user,
-      this.attemptedQuiz
-    )
+  async onButtonChange (e, questions: Question[], answer: Answer) {
+    if (e.target.checked) {
+      await this.userService.saveQuizQuestion(
+        {
+          name: questions[this.index].name,
+          id: questions[this.index].id,
+          answers: [answer]
+        },
+        this.user,
+        this.attemptedQuiz
+      )
+    } else {
+      await this.userService.removeQuizQuestion(
+        {
+          name: questions[this.index].name,
+          id: questions[this.index].id,
+          answers: [answer]
+        },
+        this.user,
+        this.attemptedQuiz
+      )
+    }
   }
 
   isChecked (question: Question, userQuestions: Question[], answerName: string) {

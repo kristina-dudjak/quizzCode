@@ -1,16 +1,16 @@
 <div
   class="quiz-dialog"
   mat-dialog-content
-  *ngIf="(attemptedQuiz$ | async) && (attemptedQuiz$ | async) as attemptedQuiz"
+  *ngIf="attemptedQuiz$ | async as attemptedQuiz"
 >
   <h3 class="quiz-dialog__title" mat-dialog-title>Your score is:</h3>
   <mat-progress-bar
     class="progress-bar"
     [mode]="'determinate'"
-    [value]="(attemptedQuiz.score / attemptedQuiz.totalQuestions) * 100"
+    [value]="(attemptedQuiz.score / attemptedQuiz.maxScore) * 100"
   >
   </mat-progress-bar>
-  <p>{{ attemptedQuiz.score }} / {{ attemptedQuiz.totalQuestions }}</p>
+  <p>{{ attemptedQuiz.score }} / {{ attemptedQuiz.maxScore }}</p>
   <div class="quiz-dialog__actions" mat-dialog-actions>
     <button
       class="quiz-dialog__actions__submit"

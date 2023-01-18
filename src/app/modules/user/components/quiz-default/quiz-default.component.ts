@@ -43,7 +43,14 @@ export class QuizDefaultComponent implements OnInit {
   }
 
   confirm () {
-    this.dialog.open(ConfirmSubmitDialogComponent)
+    this.dialog.open(ConfirmSubmitDialogComponent, {
+      data: {
+        attemptedQuiz: this.attemptedQuiz,
+        user: this.user,
+        allQuizzes: this.allQuizzes,
+        questions: this.questions
+      }
+    })
   }
 
   ngOnInit (): void {

@@ -34,8 +34,9 @@ export class QuizService {
             })
           )
         )
-    )
-    this.storeService.updateAllQuizzes(quizzes)
+    ).then(() => {
+      this.storeService.updateAllQuizzes(quizzes)
+    })
   }
 
   loadQuizLevels (language: string) {
@@ -57,8 +58,9 @@ export class QuizService {
             )
           )
         )
-    )
-    this.storeService.updateLevelsState(levels)
+    ).then(() => {
+      this.storeService.updateLevelsState(levels)
+    })
   }
   initialQuestionsLoad (language: string, level: string) {
     const questions: Question[] = []
@@ -72,23 +74,24 @@ export class QuizService {
         .pipe(
           map(actions =>
             actions.map(
-              ({ payload: { doc } }: DocumentChangeAction<unknown>) => {
+              async ({ payload: { doc } }: DocumentChangeAction<unknown>) => {
                 questions.push({
                   id: doc.data()['id'],
                   name: doc.data()['name'],
-                  answers: this.getAnswers(language, level, doc.id)
+                  answers: await this.getAnswers(language, level, doc.id)
                 })
               }
             )
           )
         )
-    )
-    this.storeService.updateQuestionsState(questions)
+    ).then(() => {
+      this.storeService.updateQuestionsState(questions)
+    })
   }
 
-  getAnswers (language: string, level: string, questionId: string) {
+  async getAnswers (language: string, level: string, questionId: string) {
     const answers: Answer[] = []
-    firstValueFrom(
+    await firstValueFrom(
       this.db
         .collection(
           `quizzes/${language}/Level/${level}/multipleChoiceQuestions/${questionId}/answers`

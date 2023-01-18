@@ -90,20 +90,21 @@ export class StoreService extends Store<StoreInterface> {
         level: attemptedQuiz.level,
         thumbnail: attemptedQuiz.thumbnail,
         isCompleted: attemptedQuiz.isCompleted,
-        score: 0,
+        score: attemptedQuiz.score,
+        maxScore: attemptedQuiz.maxScore,
         questions: attemptedQuiz.questions
       }
     })
   }
 
+  updateQuestionsInAttemptedQuiz (_questions: Question[]) {
+    const { questions, ...rest } = this.state.attemptedQuiz
+    this.setState({ attemptedQuiz: { questions: _questions, ...rest } })
+  }
+
   updateScoreInAttemptedQuiz (_score: number) {
     const { score, ...rest } = this.state.attemptedQuiz
     this.setState({ attemptedQuiz: { score: _score, ...rest } })
-  }
-
-  updateTotalQuestionsInAttemptedQuiz (total: number) {
-    const { totalQuestions, ...rest } = this.state.attemptedQuiz
-    this.setState({ attemptedQuiz: { totalQuestions: total, ...rest } })
   }
 
   updateLevelInAttemptedQuiz (_level: string) {

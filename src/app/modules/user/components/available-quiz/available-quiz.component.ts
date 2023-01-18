@@ -25,8 +25,7 @@ export class AvailableQuizComponent {
     this.storeService.updateAttemptedQuiz({
       name: this.availableQuiz.name,
       thumbnail: this.availableQuiz.thumbnail,
-      isCompleted: false,
-      questions: []
+      isCompleted: false
     })
     this.quizService.loadQuizLevels(this.availableQuiz.name)
     this.dialog.open(QuizLevelDialogComponent, { data: this.user.isAdmin })

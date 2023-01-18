@@ -1,10 +1,9 @@
 import { Component } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
-import { AttemptedQuiz } from 'src/app/shared/models/Quiz'
-import { User } from 'src/app/shared/models/User'
-import { StoreService } from 'src/app/shared/services/store.service'
 import { UserService } from '../../services/user.service'
 import { QuizResultDialogComponent } from '../quiz-result-dialog/quiz-result-dialog.component'
+import { MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { Inject } from '@angular/core'
 
 @Component({
   selector: 'app-confirm-submit-dialog',
@@ -15,13 +14,22 @@ export class ConfirmSubmitDialogComponent {
   constructor (
     private dialog: MatDialog,
     private userService: UserService,
-    private storeService: StoreService
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
-  attemptedQuiz$ = this.storeService.attemptedQuiz$
-  user$ = this.storeService.user$
 
-  showResult (attemptedQuiz: AttemptedQuiz, user: User) {
-    this.dialog.open(QuizResultDialogComponent, { disableClose: true })
-    this.userService.saveQuizScore(attemptedQuiz, user)
+  async showResult () {
+    await this.userService.saveQuizScore(
+      this.data.attemptedQuiz,
+      this.data.user
+    )
+    this.dialog.open(QuizResultDialogComponent, {
+      disableClose: true,
+      data: {
+        attemptedQuiz: this.data.attemptedQuiz,
+        user: this.data.user,
+        allQuizzes: this.data.allQuizzes,
+        questions: this.data.questions
+      }
+    })
   }
 }
