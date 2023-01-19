@@ -29,7 +29,7 @@ export class NewQuizDefaultComponent implements OnInit {
 
   ngOnInit() {
     if (!this.user.isAdmin) this.router.navigateByUrl('quizzes')
-    if (this.attemptedQuiz) {
+    if (this.attemptedQuiz && this.attemptedQuiz.name !== '') {
       this.quizForm.patchValue({
         language: this.attemptedQuiz.name,
         thumbnail: this.attemptedQuiz.thumbnail,
