@@ -1,7 +1,6 @@
-<div *ngIf="user$ | async as user">
-  <app-admin-default
-    *ngIf="attemptedQuiz$ | async as attemptedQuiz"
-    [user]="user"
-    [attemptedQuiz]="attemptedQuiz"
-  ></app-admin-default>
-</div>
+<app-new-quiz-default
+  *ngIf="user$ | async"
+  [questions]="questions$ | async"
+  [attemptedQuiz]="attemptedQuiz$ | async"
+  [user]="user$ | async"
+></app-new-quiz-default>

@@ -27,7 +27,7 @@ export class AnswersInputComponent {
     )
   }
 
-  removeQuestionAnswer(j) {
+  removeQuestionAnswer(j: number) {
     const questions = this.form.get('questions') as FormArray
     const answers = questions.controls[j].get('questionAnswers') as FormArray
     answers.removeAt(j)

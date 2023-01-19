@@ -1,10 +1,6 @@
-<button
-  *ngIf="attemptedQuiz && questions"
-  (click)="deleteQuiz(attemptedQuiz, questions)"
->
-  Delete quiz
-</button>
-<form class="new-quiz" [formGroup]="quizForm">
+<button (click)="deleteQuiz(attemptedQuiz, questions)">Delete quiz</button>
+<button (click)="resetQuiz()">Reset quiz</button>
+<form class="new-quiz" [formGroup]="quizForm" *ngIf="user.isAdmin">
   <mat-form-field class="new-quiz__field" appearance="outline">
     <mat-label>Quiz language name</mat-label>
     <input

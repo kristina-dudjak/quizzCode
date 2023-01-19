@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { FormBuilder, FormArray } from '@angular/forms'
 import { Router } from '@angular/router'
-import { Answer } from 'src/app/shared/models/Answer'
 import { Question } from 'src/app/shared/models/Question'
 import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
+import { User } from 'src/app/shared/models/User'
 import { AdminService } from '../../services/admin.service'
 
 @Component({
@@ -19,6 +19,7 @@ export class NewQuizDefaultComponent implements OnInit {
   ) {}
   @Input() questions: Question[]
   @Input() attemptedQuiz: AttemptedQuiz
+  @Input() user: User
   quizForm = this.fb.group({
     language: [''],
     thumbnail: [''],
@@ -26,18 +27,17 @@ export class NewQuizDefaultComponent implements OnInit {
     questions: this.initQuestions()
   })
 
-  ngOnInit(): void {
+  ngOnInit() {
+    if (!this.user.isAdmin) this.router.navigateByUrl('quizzes')
     if (this.attemptedQuiz) {
-      this.quizForm.controls['language'].setValue(this.attemptedQuiz.name)
-      this.quizForm.controls['thumbnail'].setValue(this.attemptedQuiz.thumbnail)
-      this.quizForm.controls['level'].setValue(this.attemptedQuiz.level)
-      const control = <FormArray>this.quizForm.get('questions')
-      control.removeAt(0)
+      this.quizForm.patchValue({
+        language: this.attemptedQuiz.name,
+        thumbnail: this.attemptedQuiz.thumbnail,
+        level: this.attemptedQuiz.level
+      })
+      const control = this.quizForm.get('questions') as FormArray
+      control.clear()
       this.questions.forEach(question => {
-        const answers: Answer[] = []
-        question.answers.forEach(answer => {
-          answers.push(answer)
-        })
         control.push(
           this.fb.group({
             questionId: question.id,
@@ -48,8 +48,9 @@ export class NewQuizDefaultComponent implements OnInit {
         const ans = control.controls[question.id].get(
           'questionAnswers'
         ) as FormArray
-        ans.removeAt(0)
-        answers.forEach(answer => {
+        ans.clear()
+
+        question.answers.forEach(answer => {
           ans.push(
             this.fb.group({
               answerId: answer.id,
@@ -92,6 +93,10 @@ export class NewQuizDefaultComponent implements OnInit {
     )
   }
 
+  resetQuiz() {
+    this.quizForm.reset()
+  }
+
   async deleteQuiz(attemptedQuiz: Quiz, questions: Question[]) {
     await this.adminService.deleteAttemptedQuiz(attemptedQuiz, questions)
     this.router.navigateByUrl('quizzes')
@@ -99,27 +104,21 @@ export class NewQuizDefaultComponent implements OnInit {
 
   async onSubmit() {
     const { thumbnail, language, level, questions } = this.quizForm.value
-    const quest: Question[] = []
-    questions.forEach(question => {
-      const answers: Answer[] = []
-      question.questionAnswers.forEach(answer => {
-        answers.push({
+    const quests = questions.map((question, id) => {
+      const answers = question.questionAnswers.map((answer, answerIndex) => {
+        return {
           name: answer.answerName,
           correct: answer.answerCorrect,
-          id: question.questionAnswers.indexOf(answer).toString()
-        })
+          id: answerIndex.toString()
+        }
       })
-      quest.push({
-        name: question.questionName,
-        answers: answers,
-        id: this.quizForm.value.questions.indexOf(question)
-      })
+      return { name: question.questionName, answers, id }
     })
     const quiz: Quiz = {
-      thumbnail: thumbnail,
+      thumbnail,
       name: language,
-      level: level,
-      questions: quest
+      level,
+      questions: quests
     }
     await this.adminService.saveNewQuizToDb(
       quiz,

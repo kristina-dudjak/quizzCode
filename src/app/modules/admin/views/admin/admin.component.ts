@@ -10,4 +10,5 @@ export class AdminComponent {
   constructor (private storeService: StoreService) {}
   user$ = this.storeService.user$
   attemptedQuiz$ = this.storeService.attemptedQuiz$
+  questions$ = this.storeService.questions$
 }
