@@ -9,7 +9,7 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login'])
 
-const redirectLoggedInToConfigurator = () => redirectLoggedInTo(['quizzes'])
+const redirectLoggedInToQuizzes = () => redirectLoggedInTo(['quizzes'])
 
 const routes: Routes = [
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./modules/auth/auth.module').then(m => m.AuthModule),
-    ...canActivate(redirectLoggedInToConfigurator)
+    ...canActivate(redirectLoggedInToQuizzes)
   },
   {
     path: 'quizzes',

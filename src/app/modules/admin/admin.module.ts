@@ -11,8 +11,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatCardModule } from '@angular/material/card'
 
 import { AdminComponent } from './views/admin/admin.component'
-import { AdminDefaultComponent } from './components/admin-default/admin-default.component'
-import { NewQuizComponent } from './components/new-quiz/new-quiz.component'
 import { QuestionsInputComponent } from './components/questions-input/questions-input.component'
 import { AnswersInputComponent } from './components/answers-input/answers-input.component'
 import { NewQuizDefaultComponent } from './components/new-quiz-default/new-quiz-default.component'
@@ -20,8 +18,6 @@ import { NewQuizDefaultComponent } from './components/new-quiz-default/new-quiz-
 @NgModule({
   declarations: [
     AdminComponent,
-    AdminDefaultComponent,
-    NewQuizComponent,
     QuestionsInputComponent,
     AnswersInputComponent,
     NewQuizDefaultComponent
