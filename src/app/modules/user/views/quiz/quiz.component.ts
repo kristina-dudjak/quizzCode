@@ -22,7 +22,7 @@ export class QuizComponent implements OnInit {
   user$ = this.storeService.user$
   allQuizzes$ = this.storeService.allQuizzes$
 
-  ngOnInit (): void {
+  ngOnInit () {
     this.language = this.route.snapshot.paramMap.get('language')
     this.level = this.route.snapshot.paramMap.get('level')
     this.quizService.initialQuizzesLoad()

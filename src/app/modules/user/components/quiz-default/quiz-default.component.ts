@@ -53,7 +53,7 @@ export class QuizDefaultComponent implements OnInit {
     })
   }
 
-  ngOnInit (): void {
+  ngOnInit () {
     this.language = this.route.snapshot.paramMap.get('language')
     this.level = this.route.snapshot.paramMap.get('level')
     this.userService.loadAttemptedQuiz(

@@ -15,7 +15,7 @@ export class QuizzesDefaultComponent implements OnInit {
 
   user$ = this.storeService.user$
 
-  ngOnInit (): void {
+  ngOnInit () {
     this.quizService.initialQuizzesLoad()
   }
 }

@@ -11,7 +11,7 @@ export class SolvedListComponent implements OnInit {
   constructor (private userService: UserService) {}
   @Input() user: User
 
-  ngOnInit (): void {
+  ngOnInit () {
     this.userService.getUserQuizLanguages(this.user)
   }
 }
