@@ -12,7 +12,7 @@ export class HeaderComponent {
 
   @Input() user: User
 
-  signOut () {
-    this.authService.signOut()
+  async signOut () {
+    await this.authService.signOut()
   }
 }

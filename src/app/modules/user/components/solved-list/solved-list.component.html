@@ -1,16 +1,19 @@
-<div *ngIf="user">
+<section class="quizzes">
   <h2
     class="quizzes__title"
     *ngIf="(user.solvedQuizzes | solvedQuizzes: true).length !== 0"
   >
     Solved
   </h2>
-  <ul class="solved-quizzes">
+  <ul class="quizzes__list">
     <li
-      class="solved-quizzes__quiz"
+      class="quizzes__list__quiz"
       *ngFor="let quiz of user.solvedQuizzes | solvedQuizzes: true"
     >
-      <app-solved-item [solvedQuiz]="quiz"></app-solved-item>
+      <app-solved-item
+        class="quizzes__list__quiz__item"
+        [solvedQuiz]="quiz"
+      ></app-solved-item>
     </li>
   </ul>
   <h2
@@ -19,12 +22,15 @@
   >
     In progress
   </h2>
-  <ul class="solved-quizzes">
+  <ul class="quizzes__list">
     <li
-      class="solved-quizzes__quiz"
+      class="quizzes__list__quiz"
       *ngFor="let quiz of user.solvedQuizzes | solvedQuizzes: false"
     >
-      <app-solved-item [solvedQuiz]="quiz"></app-solved-item>
+      <app-solved-item
+        class="quizzes__list__quiz__item"
+        [solvedQuiz]="quiz"
+      ></app-solved-item>
     </li>
   </ul>
-</div>
+</section>

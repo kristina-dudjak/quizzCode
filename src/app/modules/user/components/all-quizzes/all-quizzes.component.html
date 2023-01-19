@@ -1,6 +1,7 @@
-<ul class="solved-quizzes" *ngIf="user$ | async as user">
-  <li class="solved-quizzes__quiz" *ngFor="let quiz of quizzes$ | async">
+<ul class="all-quizzes" *ngIf="user$ | async as user">
+  <li class="all-quizzes__quiz" *ngFor="let quiz of allQuizzes$ | async">
     <app-available-quiz
+      class="all-quizzes__quiz__item"
       [availableQuiz]="quiz"
       [user]="user"
     ></app-available-quiz>

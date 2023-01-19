@@ -1,14 +1,13 @@
-<div class="quiz" *ngIf="attemptedQuiz && questions && questions.length !== 0">
-  <div class="quiz__questions">
-    <app-quiz-form
-      [user]="user"
-      [attemptedQuiz]="attemptedQuiz"
-      [index]="index$.value"
-      [questions]="questions"
-    ></app-quiz-form>
-  </div>
-  <mat-paginator
+<main class="quiz" *ngIf="attemptedQuiz && questions && questions.length !== 0">
+  <app-quiz-form
     class="quiz__questions"
+    [user]="user"
+    [attemptedQuiz]="attemptedQuiz"
+    [index]="index$.value"
+    [questions]="questions"
+  ></app-quiz-form>
+  <mat-paginator
+    class="quiz__paginator"
     (page)="handlePageEvent($event)"
     [length]="questions.length"
     [pageSize]="1"
@@ -19,10 +18,11 @@
   >
   </mat-paginator>
   <button
+    mat-raised-button
     class="quiz__submit"
     (click)="confirm()"
     *ngIf="page === questions.length - 1"
   >
     Finish
   </button>
-</div>
+</main>

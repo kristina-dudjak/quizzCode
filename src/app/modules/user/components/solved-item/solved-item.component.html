@@ -20,7 +20,7 @@
     >
     <mat-card-actions class="quiz__info__actions">
       <button
-        class="quiz__info__actions__retry"
+        class="quiz__info__actions__action"
         mat-button
         *ngIf="solvedQuiz.isCompleted"
         [routerLink]="[solvedQuiz.name, solvedQuiz.level]"
@@ -28,7 +28,7 @@
         Try again
       </button>
       <button
-        class="quiz__info__actions__retry"
+        class="quiz__info__actions__action"
         mat-button
         *ngIf="!solvedQuiz.isCompleted"
         [routerLink]="[solvedQuiz.name, solvedQuiz.level]"

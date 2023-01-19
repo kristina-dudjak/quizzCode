@@ -20,7 +20,7 @@
     &__actions {
       margin: 0;
 
-      &__retry {
+      &__action {
         background-color: mat.get-color-from-palette($primary, 300);
         cursor: pointer;
         padding: 8px 20px;

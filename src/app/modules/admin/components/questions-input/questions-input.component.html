@@ -11,8 +11,12 @@
             class="form__array__questions__group__question__field"
             appearance="outline"
           >
-            <mat-label>Question {{ i }}</mat-label>
+            <mat-label
+              class="form__array__questions__group__question__field__label"
+              >Question {{ i }}</mat-label
+            >
             <input
+              class="form__array__questions__group__question__field__input"
               matInput
               required
               type="text"
@@ -24,13 +28,18 @@
             mat-icon-button
             (click)="removeQuestion(i)"
           >
-            <mat-icon>delete</mat-icon>
+            <mat-icon
+              class="form__array__questions__group__question__remove__icon"
+              >delete</mat-icon
+            >
           </button>
         </div>
-
         <div class="form__array__questions__group__answers">
-          <mat-label>Answers</mat-label>
+          <mat-label class="form__array__questions__group__answers__label"
+            >Answers</mat-label
+          >
           <app-answers-input
+            class="form__array__questions__group__answers__list"
             [question]="question"
             [i]="i"
             [form]="form"
@@ -39,5 +48,7 @@
       </div>
     </div>
   </div>
-  <button type="button" (click)="addQuestion()">+ Add another question</button>
+  <button class="form__add-question" type="button" (click)="addQuestion()">
+    + Add another question
+  </button>
 </div>

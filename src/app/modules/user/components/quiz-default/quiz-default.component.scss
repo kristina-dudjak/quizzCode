@@ -1,16 +1,22 @@
 .quiz {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 1fr 12fr;
-  height: calc(100vh - 80px);
+  grid-template-rows: 1fr 1fr 12fr;
+  height: calc(100vh - 160px);
   column-gap: 12px;
-  padding-top: 40px;
+  padding-top: 80px;
 
   &__questions {
+    grid-column: 4 / 10;
+  }
+
+  &__paginator {
     grid-column: 4 / 9;
   }
 
   &__submit {
     grid-column: 4 / 9;
+    align-self: center;
+    padding: 20px;
   }
 }

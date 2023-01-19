@@ -35,7 +35,8 @@
       *ngIf="data.valueOf()"
       mat-button
       mat-dialog-close
-      [routerLink]="['admin/new-quiz']"
+      [disabled]="!attemptedQuiz.level"
+      [routerLink]="['admin']"
     >
       Edit
     </button>

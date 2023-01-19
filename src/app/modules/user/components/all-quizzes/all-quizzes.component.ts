@@ -8,6 +8,6 @@ import { StoreService } from 'src/app/shared/services/store.service'
 })
 export class AllQuizzesComponent {
   constructor (private storeService: StoreService) {}
-  quizzes$ = this.storeService.allQuizzes$
+  allQuizzes$ = this.storeService.allQuizzes$
   user$ = this.storeService.user$
 }
