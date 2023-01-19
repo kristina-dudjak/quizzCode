@@ -49,7 +49,7 @@ export class StoreService extends Store<StoreInterface> {
     this.setState({ allQuizzes })
   }
 
-  updateUserState (user: firebase.User) {
+  updateUserState (user: firebase.User, isAdmin: boolean) {
     if (!user) {
       this.setState({ user: undefined })
     } else {
@@ -57,16 +57,11 @@ export class StoreService extends Store<StoreInterface> {
         user: {
           uid: user.uid,
           email: user.email,
-          isAdmin: false,
+          isAdmin: isAdmin,
           solvedQuizzes: []
         }
       })
     }
-  }
-
-  updateIsAdminInUser (admin: boolean) {
-    const { isAdmin, ...rest } = this.state.user
-    this.setState({ user: { isAdmin: admin, ...rest } })
   }
 
   updateErrorMessageState (errorMessage: string) {

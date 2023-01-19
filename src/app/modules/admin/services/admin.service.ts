@@ -15,57 +15,60 @@ export class AdminService {
     questions: Question[]
   ) {
     if (attemptedQuiz) await this.deleteAttemptedQuiz(attemptedQuiz, questions)
-    this.db
-      .collection('quizzes')
-      .doc(newQuiz.name)
-      .set({ thumbnail: newQuiz.thumbnail }, { merge: true })
-    this.db
-      .collection(`quizzes/${newQuiz.name}/Level`)
-      .doc(newQuiz.level)
-      .set({ level: newQuiz.level }, { merge: true })
+    const quizzesRef = this.db.collection('quizzes').doc(newQuiz.name)
+    const levelRef = quizzesRef.collection('Level').doc(newQuiz.level)
+    const batch = this.db.firestore.batch()
+    batch
+      .set(quizzesRef.ref, { thumbnail: newQuiz.thumbnail })
+      .set(levelRef.ref, { level: newQuiz.level })
     newQuiz.questions.forEach(question => {
-      this.db
+      const questionRef = this.db
         .collection(
           `quizzes/${newQuiz.name}/Level/${newQuiz.level}/multipleChoiceQuestions`
         )
         .doc(question.id.toString())
-        .set({ name: question.name, id: question.id }, { merge: true })
+      batch.set(questionRef.ref, { name: question.name, id: question.id })
       question.answers.forEach(answer => {
-        this.db
+        const answerRef = this.db
           .collection(
             `quizzes/${newQuiz.name}/Level/${newQuiz.level}/multipleChoiceQuestions/${question.id}/answers`
           )
           .doc(answer.id)
-          .set({ name: answer.name, correct: answer.correct }, { merge: true })
+        batch.set(answerRef.ref, { name: answer.name, correct: answer.correct })
       })
     })
+    await batch.commit()
   }
 
   async deleteAttemptedQuiz (quiz: Quiz, questions: Question[]) {
+    const batch = this.db.firestore.batch()
     questions.forEach(async question => {
-      const qry: firebase.default.firestore.QuerySnapshot = await this.db
+      const answerRefs: firebase.default.firestore.QuerySnapshot = await this.db
         .collection(
           `quizzes/${quiz.name}/Level/${quiz.level}/multipleChoiceQuestions/${question.id}/answers`
         )
         .ref.get()
-      qry.forEach(doc => {
-        doc.ref.delete()
+      answerRefs.forEach(doc => {
+        batch.delete(doc.ref)
       })
     })
-    const quest: firebase.default.firestore.QuerySnapshot = await this.db
+    const questionRefs = await this.db
       .collection(
         `quizzes/${quiz.name}/Level/${quiz.level}/multipleChoiceQuestions`
       )
       .ref.get()
-    quest.forEach(doc => {
-      doc.ref.delete()
+    questionRefs.forEach(doc => {
+      batch.delete(doc.ref)
     })
-    this.db.doc(`quizzes/${quiz.name}/Level/${quiz.level}`).delete()
-    const level: firebase.default.firestore.QuerySnapshot = await this.db
+    const levelRef = this.db.doc(`quizzes/${quiz.name}/Level/${quiz.level}`).ref
+    batch.delete(levelRef)
+    const levels: firebase.default.firestore.QuerySnapshot = await this.db
       .collection(`quizzes/${quiz.name}/Level`)
       .ref.get()
-    if (level.empty) {
-      this.db.doc(`quizzes/${quiz.name}`).delete()
+    if (levels.empty) {
+      const quizRef = this.db.doc(`quizzes/${quiz.name}`).ref
+      batch.delete(quizRef)
     }
+    await batch.commit()
   }
 }

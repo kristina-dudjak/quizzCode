@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Router } from '@angular/router'
 import firebase from 'firebase/compat/app'
-import { firstValueFrom, map } from 'rxjs'
 import { StoreService } from 'src/app/shared/services/store.service'
 
 @Injectable({
@@ -16,113 +15,79 @@ export class AuthService {
     private router: Router,
     private storeService: StoreService
   ) {
-    this.firebaseAuth.onAuthStateChanged(user => {
-      this.storeService.updateUserState(user)
-      if (user) this.checkIfAdmin(user)
+    this.firebaseAuth.onAuthStateChanged(async user => {
+      if (user) {
+        this.storeService.updateUserState(user, await this.checkIfAdmin(user))
+        await this.checkIfAdmin(user)
+      }
     })
   }
 
-  checkIfAdmin (user: firebase.User) {
-    firstValueFrom(
-      this.db
-        .collection('users')
-        .doc(user.uid)
-        .get()
-        .pipe(
-          map(doc => {
-            if (doc.data()['isAdmin']) {
-              this.storeService.updateIsAdminInUser(doc.data()['isAdmin'])
-            }
-          })
-        )
-    )
+  async checkIfAdmin (user: firebase.User) {
+    return await (
+      await this.db.collection(`users`).doc(user.uid).ref.get()
+    ).data()['isAdmin']
   }
 
-  googleSignIn (rememberMe: boolean) {
-    return this.firebaseAuth
-      .setPersistence(rememberMe ? 'local' : 'session')
-      .then(() => {
-        this.firebaseAuth
-          .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-          .then(result => {
-            this.storeService.updateUserState(result.user)
-            this.saveUserToDb(result.user)
-            this.router.navigateByUrl('quizzes')
-          })
-          .catch(error => {
-            this.storeService.updateErrorMessageState(error.message)
-          })
-      })
-  }
-
-  signIn (email: string, password: string, rememberMe: boolean) {
-    return this.firebaseAuth
-      .setPersistence(rememberMe ? 'local' : 'session')
-      .then(() => {
-        this.firebaseAuth
-          .signInWithEmailAndPassword(email, password)
-          .then(result => {
-            this.storeService.updateUserState(result.user)
-            this.router.navigateByUrl('quizzes')
-          })
-          .catch(error => {
-            this.storeService.updateErrorMessageState(error.message)
-          })
-      })
-  }
-
-  signUp (email: string, password: string, rememberMe: boolean) {
-    return this.firebaseAuth
-      .setPersistence(rememberMe ? 'local' : 'session')
-      .then(() => {
-        this.firebaseAuth
-          .createUserWithEmailAndPassword(email, password)
-          .then(result => {
-            this.storeService.updateUserState(result.user)
-            this.saveUserToDb(result.user)
-            this.router.navigateByUrl('quizzes')
-          })
-          .catch(error => {
-            this.storeService.updateErrorMessageState(error.message)
-          })
-      })
-  }
-
-  signOut () {
-    return this.firebaseAuth
-      .signOut()
-      .then(() => {
-        this.storeService.updateUserState(undefined)
-        this.router.navigateByUrl('login')
+  async googleSignIn (rememberMe: boolean) {
+    await this.firebaseAuth.setPersistence(rememberMe ? 'local' : 'session')
+    await this.firebaseAuth
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(async result => {
+        await this.saveUserToDb(result.user)
+        this.router.navigateByUrl('quizzes')
       })
       .catch(error => {
         this.storeService.updateErrorMessageState(error.message)
       })
   }
 
-  sendPasswordResetEmail (email: string) {
-    return this.firebaseAuth.sendPasswordResetEmail(email).catch(error => {
+  async signIn (email: string, password: string, rememberMe: boolean) {
+    await this.firebaseAuth.setPersistence(rememberMe ? 'local' : 'session')
+    await this.firebaseAuth
+      .signInWithEmailAndPassword(email, password)
+      .catch(error => {
+        this.storeService.updateErrorMessageState(error.message)
+      })
+    this.router.navigateByUrl('quizzes')
+  }
+
+  async signUp (email: string, password: string, rememberMe: boolean) {
+    await this.firebaseAuth.setPersistence(rememberMe ? 'local' : 'session')
+    await this.firebaseAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(async result => {
+        await this.saveUserToDb(result.user)
+        this.router.navigateByUrl('quizzes')
+      })
+      .catch(error => {
+        this.storeService.updateErrorMessageState(error.message)
+      })
+  }
+
+  async signOut () {
+    await this.firebaseAuth.signOut().catch(error => {
+      this.storeService.updateErrorMessageState(error.message)
+    })
+    this.router.navigateByUrl('login')
+  }
+
+  async sendPasswordResetEmail (email: string) {
+    await this.firebaseAuth.sendPasswordResetEmail(email).catch(error => {
       this.storeService.updateErrorMessageState(error.message)
     })
   }
 
-  saveUserToDb (user: firebase.User) {
-    this.db
-      .collection(`users`)
-      .doc(user.uid)
-      .get()
-      .pipe(
-        map(doc => {
-          if (doc.exists) return
-          this.db.collection(`users`).doc(user.uid).set(
-            {
-              uid: user.uid,
-              email: user.email,
-              isAdmin: false
-            },
-            { merge: true }
-          )
-        })
-      )
+  async saveUserToDb (user: firebase.User) {
+    const userRef = this.db.collection(`users`).doc(user.uid).ref
+    if ((await userRef.get()).exists) return
+    userRef.set(
+      {
+        uid: user.uid,
+        email: user.email,
+        isAdmin: false
+      },
+      { merge: true }
+    )
   }
 }
