@@ -46,17 +46,17 @@ export class LoginComponent {
   isPasswordVisible = true
   rememberMe = true
 
-  onLogin () {
+  async onLogin () {
     if (!this.loginForm.valid) return
-    this.authService.signIn(
+    await this.authService.signIn(
       this.loginForm.value.email as string,
       this.loginForm.value.password as string,
       this.rememberMe
     )
   }
 
-  onGoogleLogin () {
-    this.authService.googleSignIn(this.rememberMe)
+  async onGoogleLogin () {
+    await this.authService.googleSignIn(this.rememberMe)
   }
 
   openEmailDialog () {

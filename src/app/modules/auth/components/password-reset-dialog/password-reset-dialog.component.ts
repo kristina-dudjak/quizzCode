@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
+import { AuthService } from '../../services/auth.service'
 import { ValidationService } from '../../services/validation.service'
 
 @Component({
@@ -10,7 +11,8 @@ import { ValidationService } from '../../services/validation.service'
 export class PasswordResetDialogComponent {
   constructor (
     private validationService: ValidationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService
   ) {}
 
   emailForm = this.fb.group(
@@ -25,5 +27,6 @@ export class PasswordResetDialogComponent {
 
   sendEmail () {
     if (!this.emailForm.valid) return
+    this.authService.sendPasswordResetEmail(this.emailForm.value.emailReset)
   }
 }

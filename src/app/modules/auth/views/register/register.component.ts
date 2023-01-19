@@ -54,18 +54,18 @@ export class RegisterComponent {
   errorMessage$ = this.storeService.errorMessage$
   rememberMe = true
 
-  onRegister () {
+  async onRegister () {
     if (!this.registerForm.valid) {
       return
     }
-    this.authService.signUp(
+    await this.authService.signUp(
       this.registerForm.value.email as string,
       this.registerForm.value.password as string,
       this.rememberMe
     )
   }
 
-  onGoogleLogin () {
-    this.authService.googleSignIn(this.rememberMe)
+  async onGoogleLogin () {
+    await this.authService.googleSignIn(this.rememberMe)
   }
 }
