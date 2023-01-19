@@ -1,0 +1,9 @@
+.quizzes__list {
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  &__quiz {
+    margin: 20px;
+  }
+}

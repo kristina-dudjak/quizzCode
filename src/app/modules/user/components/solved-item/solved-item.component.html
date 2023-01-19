@@ -1,0 +1,40 @@
+<mat-card class="quiz">
+  <img
+    class="quiz_img"
+    mat-card-sm-image
+    [src]="solvedQuiz.thumbnail"
+    (error)="setDefaultImg()"
+  />
+  <div class="quiz__info">
+    <mat-card-title class="quiz__info__name">{{
+      solvedQuiz.name
+    }}</mat-card-title>
+    <mat-card-subtitle class="quiz__info__subtitle"
+      >Level: {{ solvedQuiz.level }}</mat-card-subtitle
+    >
+    <mat-card-subtitle
+      class="quiz__info__subtitle"
+      *ngIf="solvedQuiz.isCompleted"
+      >Score: {{ solvedQuiz.score }} /
+      {{ solvedQuiz.maxScore }}</mat-card-subtitle
+    >
+    <mat-card-actions class="quiz__info__actions">
+      <button
+        class="quiz__info__actions__action"
+        mat-button
+        *ngIf="solvedQuiz.isCompleted"
+        [routerLink]="[solvedQuiz.name, solvedQuiz.level]"
+      >
+        Try again
+      </button>
+      <button
+        class="quiz__info__actions__action"
+        mat-button
+        *ngIf="!solvedQuiz.isCompleted"
+        [routerLink]="[solvedQuiz.name, solvedQuiz.level]"
+      >
+        Continue
+      </button>
+    </mat-card-actions>
+  </div>
+</mat-card>

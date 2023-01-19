@@ -1,0 +1,15 @@
+.question {
+  margin: 20px 42px;
+
+  &__answers {
+    &__inputs {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      &__answer {
+        width: 90%;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<section class="quizzes">
+  <h2
+    class="quizzes__title"
+    *ngIf="(user.solvedQuizzes | solvedQuizzes: true).length !== 0"
+  >
+    Solved
+  </h2>
+  <ul class="quizzes__list">
+    <li
+      class="quizzes__list__quiz"
+      *ngFor="let quiz of user.solvedQuizzes | solvedQuizzes: true"
+    >
+      <app-solved-item
+        class="quizzes__list__quiz__item"
+        [solvedQuiz]="quiz"
+      ></app-solved-item>
+    </li>
+  </ul>
+  <h2
+    class="quizzes__title"
+    *ngIf="(user.solvedQuizzes | solvedQuizzes: false).length !== 0"
+  >
+    In progress
+  </h2>
+  <ul class="quizzes__list">
+    <li
+      class="quizzes__list__quiz"
+      *ngFor="let quiz of user.solvedQuizzes | solvedQuizzes: false"
+    >
+      <app-solved-item
+        class="quizzes__list__quiz__item"
+        [solvedQuiz]="quiz"
+      ></app-solved-item>
+    </li>
+  </ul>
+</section>

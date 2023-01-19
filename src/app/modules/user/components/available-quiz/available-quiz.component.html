@@ -1,0 +1,9 @@
+<mat-card class="quiz" (click)="chooseLevel()">
+  <img
+    class="quiz__img"
+    mat-card-sm-image
+    [src]="availableQuiz.thumbnail"
+    (error)="setDefaultImg()"
+  />
+  <mat-card-title class="quiz__name">{{ availableQuiz.name }}</mat-card-title>
+</mat-card>

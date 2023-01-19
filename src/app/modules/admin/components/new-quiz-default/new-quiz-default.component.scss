@@ -1,0 +1,24 @@
+.quiz-form {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  justify-items: stretch;
+  margin-top: 80px;
+
+  &__field,
+  &__actions,
+  &__questions,
+  &__submit {
+    grid-column: 4 / 10;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  &__submit {
+    margin: 24px 0;
+  }
+}

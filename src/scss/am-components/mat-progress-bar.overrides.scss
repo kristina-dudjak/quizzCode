@@ -1,0 +1,11 @@
+@use '@angular/material' as mat;
+@import '../colors.scss';
+
+.progress-bar {
+  .mat-progress-bar-fill {
+    background-color: mat.get-color-from-palette($primary, 500);
+  }
+  .mat-progress-bar-buffer {
+    background-color: mat.get-color-from-palette($primary, 200);
+  }
+}

@@ -1,0 +1,6 @@
+<app-new-quiz-default
+  *ngIf="user$ | async"
+  [questions]="questions$ | async"
+  [attemptedQuiz]="attemptedQuiz$ | async"
+  [user]="user$ | async"
+></app-new-quiz-default>

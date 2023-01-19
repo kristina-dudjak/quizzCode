@@ -1,0 +1,28 @@
+<form
+  class="form"
+  *ngIf="
+    attemptedQuiz &&
+    attemptedQuiz.questions &&
+    attemptedQuiz.questions.length !== 0
+  "
+>
+  <h3 class="form__question">{{ questions[index].name }}</h3>
+  <h4 class="form__description">Choose one or more answers:</h4>
+  <div class="form__answers">
+    <label
+      class="form__answers__label"
+      *ngFor="let answer of questions[index].answers"
+    >
+      <input
+        class="form__answers__input"
+        type="checkbox"
+        [value]="answer.name"
+        [checked]="
+          isChecked(questions[index], attemptedQuiz.questions, answer.name)
+        "
+        (change)="onButtonChange($event, questions, answer)"
+      />
+      {{ answer.name }}
+    </label>
+  </div>
+</form>

@@ -1,0 +1,14 @@
+@use '@angular/material' as mat;
+@import '../colors.scss';
+
+.custom-menu > .mat-menu-content {
+  &:not(:empty) {
+    padding: 0;
+  }
+
+  > .mat-menu-item {
+    background-color: mat.get-color-from-palette($accent, 200);
+    border: 1px solid mat.get-color-from-palette($accent, 400);
+    color: mat.get-color-from-palette($primary, 400);
+  }
+}

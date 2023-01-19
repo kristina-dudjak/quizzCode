@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/scss/fonts.scss",
               "src/styles.scss"
             ],
             "scripts": []
@@ -99,6 +100,16 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "learn-programming:build:production",
+            "firebaseProject": "learn-programming-3b1a9",
+            "firebaseHostingSite": "learn-programming-3b1a9"
           }
         }
       }

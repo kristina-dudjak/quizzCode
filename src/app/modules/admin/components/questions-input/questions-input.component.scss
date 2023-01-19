@@ -1,0 +1,30 @@
+.form {
+  &__array {
+    &__label {
+      margin-bottom: 24px;
+    }
+    &__questions {
+      margin: 20px 42px;
+
+      &__group {
+        display: flex;
+        flex-direction: column;
+
+        &__question {
+          display: flex;
+          align-items: center;
+          &__field {
+            width: 90%;
+          }
+
+          &__remove {
+            margin-bottom: 20px;
+          }
+        }
+        &__answers {
+          margin-left: 24px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+<div class="question" [formGroup]="question">
+  <div
+    class="question__answers"
+    formArrayName="questionAnswers"
+    *ngFor="let answer of getQuestionAnswers(question); let j = index"
+  >
+    <div class="question__answers__inputs" [formGroupName]="j">
+      <mat-form-field
+        class="question__answers__inputs__answer"
+        appearance="outline"
+      >
+        <mat-label class="question__answers__inputs__answer__label"
+          >Answer name</mat-label
+        >
+        <input
+          class="question__answers__inputs__answer__input"
+          matInput
+          required
+          formControlName="answerName"
+        />
+      </mat-form-field>
+      <mat-checkbox
+        class="question__answers__inputs__correct checked-color"
+        formControlName="answerCorrect"
+        >Correct</mat-checkbox
+      >
+      <button
+        class="question__answers__inputs__remove"
+        *ngIf="getQuestionAnswers(question).length > 1"
+        mat-icon-button
+        (click)="removeQuestionAnswer(i)"
+      >
+        <mat-icon class="question__answers__inputs__remove__icon"
+          >delete</mat-icon
+        >
+      </button>
+    </div>
+  </div>
+  <button
+    class="question__add-new"
+    mat-icon-button
+    (click)="addQuestionAnswer(i)"
+  >
+    <mat-icon class="question__add-new__icon">note_add</mat-icon>
+  </button>
+</div>
