@@ -1,4 +1,6 @@
+@use '@angular/material' as mat;
 @import './scss/theme.scss';
+@import './scss/colors.scss';
 
 html,
 body {
@@ -6,4 +8,5 @@ body {
 }
 body {
   margin: 0;
+  background-color: mat.get-color-from-palette($primary, 200);
 }

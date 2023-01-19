@@ -2,7 +2,10 @@
 @import '../../../../scss/colors.scss';
 
 .header {
-  background-color: mat.get-color-from-palette($accent, 300);
+  background: linear-gradient(
+    mat.get-color-from-palette($primary, 500),
+    mat.get-color-from-palette($primary, 200)
+  );
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -12,19 +15,19 @@
     gap: 12px;
 
     &__icon {
-      color: mat.get-color-from-palette($primary, 500);
+      color: mat.get-color-from-palette($primary, 900);
     }
 
     &__name {
       margin: 0;
-      color: mat.get-color-from-palette($primary, 500);
+      color: mat.get-color-from-palette($primary, 900);
     }
   }
 
   &__menu {
     &__button {
       &__icon {
-        color: mat.get-color-from-palette($primary, 500);
+        color: mat.get-color-from-palette($primary, 900);
       }
     }
   }
