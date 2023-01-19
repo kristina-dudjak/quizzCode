@@ -14,7 +14,8 @@ export class AdminService {
     attemptedQuiz: Quiz,
     questions: Question[]
   ) {
-    if (attemptedQuiz) await this.deleteAttemptedQuiz(attemptedQuiz, questions)
+    if (attemptedQuiz && attemptedQuiz.name !== '')
+      await this.deleteAttemptedQuiz(attemptedQuiz, questions)
     const quizzesRef = this.db.collection('quizzes').doc(newQuiz.name)
     const levelRef = quizzesRef.collection('Level').doc(newQuiz.level)
     const batch = this.db.firestore.batch()
@@ -65,7 +66,7 @@ export class AdminService {
     const levels: firebase.default.firestore.QuerySnapshot = await this.db
       .collection(`quizzes/${quiz.name}/Level`)
       .ref.get()
-    if (levels.empty) {
+    if (levels.size === 1) {
       const quizRef = this.db.doc(`quizzes/${quiz.name}`).ref
       batch.delete(quizRef)
     }

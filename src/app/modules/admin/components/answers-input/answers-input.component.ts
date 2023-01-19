@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectorRef, Component, Input } from '@angular/core'
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms'
 
 @Component({
@@ -7,7 +7,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms'
   styleUrls: ['./answers-input.component.scss']
 })
 export class AnswersInputComponent {
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
   @Input() form: FormGroup
   @Input() question: FormGroup
   @Input() i: number
@@ -25,6 +25,7 @@ export class AnswersInputComponent {
         answerCorrect: [false]
       })
     )
+    this.cd.detectChanges()
   }
 
   removeQuestionAnswer(j: number) {

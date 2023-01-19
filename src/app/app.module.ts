@@ -5,12 +5,12 @@ import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { AngularFireModule } from '@angular/fire/compat'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { environment } from '../environments/environment'
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component'
 import { HeaderComponent } from './shared/components/header/header.component'
 import { MatIconModule } from '@angular/material/icon'
 import { MatMenuModule } from '@angular/material/menu'
 import { MatButtonModule } from '@angular/material/button'
+import { environment } from './environments/environment'
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent, HeaderComponent],
