@@ -1,24 +1,49 @@
+@use '@angular/material' as mat;
+@import '../../../../../scss/colors.scss';
+
 .quiz-form {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  justify-items: stretch;
-  margin-top: 80px;
+  column-gap: 12px;
+  padding-top: 80px;
+  color: mat.get-color-from-palette($secondary, 50);
 
-  &__field,
-  &__actions,
-  &__questions,
-  &__submit {
-    grid-column: 4 / 10;
-  }
-
-  &__actions {
+  &__wrapper {
+    grid-column: 3 / 11;
+    background-color: mat.get-color-from-palette($primary, 500);
+    padding: 40px;
+    border-radius: 50px;
+    border: 4px solid mat.get-color-from-palette($primary, 500);
+    margin-bottom: 40px;
     display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
+    flex-direction: column;
 
-  &__submit {
-    margin: 24px 0;
+    &__actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      &__action {
+        border: 0;
+        border-color: none;
+        padding: 8px 12px;
+        background-color: mat.get-color-from-palette($secondary, 600);
+        color: mat.get-color-from-palette($secondary, 50);
+        &:hover {
+          background-color: mat.get-color-from-palette($secondary, 800);
+        }
+      }
+    }
+
+    &__submit {
+      margin: 24px 0;
+      border-radius: 40px;
+      background-color: mat.get-color-from-palette($secondary, 600);
+      color: mat.get-color-from-palette($secondary, 50);
+      &:hover {
+        background-color: mat.get-color-from-palette($secondary, 800);
+      }
+    }
   }
 }

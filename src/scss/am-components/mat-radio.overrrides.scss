@@ -3,6 +3,6 @@
 
 .radio-checked .mat-radio-container {
   > .mat-radio-inner-circle {
-    background-color: mat.get-color-from-palette($primary, 500);
+    background-color: mat.get-color-from-palette($secondary, 500);
   }
 }

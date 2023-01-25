@@ -1,6 +1,39 @@
 @import '@angular/material/theming';
 
 $primary: (
+  50: #e3e7f2,
+  100: #b9c3df,
+  200: #8b9bca,
+  300: #5c72b4,
+  400: #3954a4,
+  500: #163694,
+  600: #13308c,
+  700: #102981,
+  800: #0c2277,
+  900: #061665,
+  A100: #96a2ff,
+  A200: #6375ff,
+  A400: #3048ff,
+  A700: #1632ff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff
+  )
+);
+
+$secondary: (
   50: #edeaf4,
   100: #d1cae5,
   200: #b3a7d3,
@@ -34,20 +67,20 @@ $primary: (
 );
 
 $accent: (
-  50: #fffaed,
-  100: #fff4d1,
-  200: #ffecb3,
-  300: #ffe494,
-  400: #ffdf7d,
-  500: #ffd966,
-  600: #ffd55e,
-  700: #ffcf53,
-  800: #ffca49,
-  900: #ffc038,
+  50: #f5ffe6,
+  100: #e6ffc1,
+  200: #d6ff97,
+  300: #c6ff6d,
+  400: #b9ff4e,
+  500: #adff2f,
+  600: #a6ff2a,
+  700: #9cff23,
+  800: #93ff1d,
+  900: #83ff12,
   A100: #ffffff,
-  A200: #ffffff,
-  A400: #fff5e1,
-  A700: #ffedc8,
+  A200: #fcfff9,
+  A400: #dfffc6,
+  A700: #d1ffad,
   contrast: (
     50: #000000,
     100: #000000,
@@ -64,12 +97,6 @@ $accent: (
     A400: #000000,
     A700: #000000
   )
-);
-
-$success: (
-  normal: #1ed286,
-  light: #6ceab5,
-  lighter: #c5f7e2
 );
 
 $error: (

@@ -4,17 +4,22 @@
 .register {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  justify-items: center;
-  margin-top: 80px;
+  justify-items: stretch;
+  height: 100vh;
+  margin-top: 40px;
+  color: mat.get-color-from-palette($secondary, 50);
 
   &__form {
-    grid-column: 6 / 8;
+    grid-column: 5 / 9;
     display: flex;
+    background-color: mat.get-color-from-palette($primary, 500);
+    padding: 20px;
+    border-radius: 40px;
     flex-direction: column;
 
     &__title {
       text-align: center;
-      color: mat.get-color-from-palette($primary, 500);
+      color: mat.get-color-from-palette($secondary, 200);
     }
 
     &__field {
@@ -25,7 +30,7 @@
       }
 
       &__toggle__icon {
-        color: mat.get-color-from-palette($accent, 500);
+        color: mat.get-color-from-palette($secondary, 300);
       }
     }
 
@@ -40,7 +45,8 @@
     }
 
     &__submit {
-      background-color: mat.get-color-from-palette($primary, 500);
+      background-color: mat.get-color-from-palette($secondary, 500);
+      color: mat.get-color-from-palette($secondary, 50);
     }
 
     &__google {
@@ -49,15 +55,16 @@
       align-self: center;
       cursor: pointer;
       padding: 4px 16px;
-      border: 2px solid mat.get-color-from-palette($primary, 200);
+      border: 2px solid mat.get-color-from-palette($secondary, 200);
       border-radius: 12px;
-      background-color: mat.get-color-from-palette($primary, 100);
+      background-color: mat.get-color-from-palette($secondary, 100);
     }
   }
 
   &__redirect {
     grid-column: 5 / 9;
-    margin: 40px 0;
+    margin: 40px 0 0 0;
     text-align: center;
+    color: mat.get-color-from-palette($accent, 500);
   }
 }

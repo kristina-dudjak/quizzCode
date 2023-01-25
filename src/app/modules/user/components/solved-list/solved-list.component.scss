@@ -1,9 +1,18 @@
-.quizzes__list {
-  padding: 0;
-  list-style-type: none;
-  display: flex;
-  flex-wrap: wrap;
-  &__quiz {
-    margin: 20px;
+@use '@angular/material' as mat;
+@import '../../../../../scss/colors.scss';
+
+.quizzes {
+  &__title {
+    color: mat.get-color-from-palette($accent, 500);
+  }
+
+  &__list {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    &__quiz {
+      margin: 20px;
+    }
   }
 }

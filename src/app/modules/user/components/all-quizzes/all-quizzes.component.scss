@@ -1,9 +1,38 @@
-.all-quizzes {
-  padding: 0;
-  list-style-type: none;
+@use '@angular/material' as mat;
+@import '../../../../../scss/colors.scss';
+
+.main {
   display: flex;
-  flex-wrap: wrap;
-  &__quiz {
-    margin: 20px;
+  justify-content: space-between;
+
+  &__all-quizzes {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    overflow-x: scroll;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    :hover {
+      transform: scale(1.1);
+    }
+    &__quiz {
+      margin: 20px;
+    }
+  }
+
+  &__left,
+  &__right {
+    border: 0;
+    background: radial-gradient(
+      circle 80px,
+      mat.get-color-from-palette($secondary, 600) 20%,
+      transparent 50%
+    );
+    cursor: pointer;
+    padding: 20px;
+
+    &__icon {
+      color: mat.get-color-from-palette($accent, 500);
+    }
   }
 }

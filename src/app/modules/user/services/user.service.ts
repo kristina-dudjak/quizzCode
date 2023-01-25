@@ -99,7 +99,7 @@ export class UserService {
                   .get()
                   .pipe(
                     map(async doc => {
-                      if (!doc.exists || doc.data()['isCompleted']) {
+                      if (!doc.exists || (await doc.data()['isCompleted'])) {
                         await this.saveQuiz(
                           language,
                           level,

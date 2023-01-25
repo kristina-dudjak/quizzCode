@@ -12,16 +12,19 @@
     grid-column: 3 / 10;
     align-self: end;
     text-align: center;
+    color: mat.get-color-from-palette($accent, 500);
   }
 
   &__description {
     grid-column: 2 / 11;
     text-align: center;
+    color: mat.get-color-from-palette($accent, 500);
   }
 
   &__redirect {
     grid-column: 3 / 10;
     align-self: start;
-    background-color: mat.get-color-from-palette($primary, 300);
+    background-color: mat.get-color-from-palette($secondary, 300);
+    color: mat.get-color-from-palette($secondary, 900);
   }
 }

@@ -8,9 +8,10 @@
 @import './am-components/mat-progress-bar.overrides.scss';
 @include mat.core($typography);
 $primary: mat.define-palette($primary);
+$secondary: mat.define-palette($secondary);
 $accent: mat.define-palette($accent);
 
-$theme: mat.define-light-theme($primary, $accent);
+$theme: mat.define-light-theme($primary, $secondary, $accent);
 
 @include mat.core-theme($theme);
 @include mat.button-theme($theme);

@@ -3,9 +3,9 @@
 
 .progress-bar {
   .mat-progress-bar-fill {
-    background-color: mat.get-color-from-palette($primary, 500);
+    background-color: mat.get-color-from-palette($secondary, 500);
   }
   .mat-progress-bar-buffer {
-    background-color: mat.get-color-from-palette($primary, 200);
+    background-color: mat.get-color-from-palette($secondary, 200);
   }
 }

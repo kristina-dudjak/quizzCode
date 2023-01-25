@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+@import '../../../../../scss/colors.scss';
+
 .quiz {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -8,15 +11,25 @@
 
   &__questions {
     grid-column: 4 / 10;
+    background-color: mat.get-color-from-palette($primary, 500);
+    padding: 20px;
   }
 
   &__paginator {
-    grid-column: 4 / 9;
+    grid-column: 5 / 10;
+    color: mat.get-color-from-palette($accent, 500);
   }
 
   &__submit {
-    grid-column: 4 / 9;
+    grid-column: 5 / 9;
     align-self: center;
     padding: 20px;
+    background-color: mat.get-color-from-palette($secondary, 500);
+    border: 2px solid mat.get-color-from-palette($secondary, 800);
+    border-radius: 60px;
+    color: mat.get-color-from-palette($secondary, 100);
+    &:hover {
+      background-color: mat.get-color-from-palette($secondary, 700);
+    }
   }
 }

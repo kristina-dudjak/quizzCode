@@ -1,9 +1,30 @@
-<ul class="all-quizzes" *ngIf="user$ | async as user">
-  <li class="all-quizzes__quiz" *ngFor="let quiz of allQuizzes$ | async">
-    <app-available-quiz
-      class="all-quizzes__quiz__item"
-      [availableQuiz]="quiz"
-      [user]="user"
-    ></app-available-quiz>
-  </li>
-</ul>
+<div class="main">
+  <button
+    class="main__left"
+    mat-icon-button
+    (mouseover)="onLeft()"
+    (click)="onLeft()"
+  >
+    <mat-icon class="main__left__icon">keyboard_arrow_left</mat-icon>
+  </button>
+  <ul #scrollContent class="main__all-quizzes" *ngIf="user$ | async as user">
+    <li
+      class="main__all-quizzes__quiz"
+      *ngFor="let quiz of allQuizzes$ | async"
+    >
+      <app-available-quiz
+        class="main__all-quizzes__quiz__item"
+        [availableQuiz]="quiz"
+        [user]="user"
+      ></app-available-quiz>
+    </li>
+  </ul>
+  <button
+    class="main__right"
+    mat-icon-button
+    (mouseover)="onRight()"
+    (click)="onRight()"
+  >
+    <mat-icon class="main__left__icon">keyboard_arrow_right</mat-icon>
+  </button>
+</div>

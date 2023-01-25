@@ -1,10 +1,10 @@
 <section class="quizzes">
+  <h1 class="quizzes__title">{{ 'All quizzes' }}</h1>
+  <app-all-quizzes class="quizzes__all"></app-all-quizzes>
+  <mat-divider class="quizzes__divider"></mat-divider>
   <app-solved-list
     class="quizzes__list"
     *ngIf="(user$ | async) && (user$ | async) as user"
     [user]="user"
   ></app-solved-list>
-  <mat-divider class="quizzes__divider"></mat-divider>
-  <h2 class="quizzes__title">All quizzes</h2>
-  <app-all-quizzes class="quizzes__all"></app-all-quizzes>
 </section>

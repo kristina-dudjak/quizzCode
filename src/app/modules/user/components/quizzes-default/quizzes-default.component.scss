@@ -5,7 +5,7 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 1fr 12fr;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 120px);
   column-gap: 12px;
   padding-top: 40px;
 
@@ -15,10 +15,14 @@
     grid-column: 2 / 12;
   }
 
+  &__title {
+    color: mat.get-color-from-palette($accent, 500);
+  }
+
   &__divider {
     margin: 20px 0;
     grid-column: 2 / 12;
     border-top-width: 3px;
-    color: mat.get-color-from-palette($primary, 500);
+    color: mat.get-color-from-palette($secondary, 500);
   }
 }

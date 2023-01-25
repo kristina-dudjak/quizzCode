@@ -4,11 +4,14 @@
 .custom-menu > .mat-menu-content {
   &:not(:empty) {
     padding: 0;
+    :hover {
+      background-color: mat.get-color-from-palette($primary, 700);
+    }
   }
 
   > .mat-menu-item {
-    background-color: mat.get-color-from-palette($accent, 200);
-    border: 1px solid mat.get-color-from-palette($accent, 400);
-    color: mat.get-color-from-palette($primary, 400);
+    background-color: mat.get-color-from-palette($primary, 500);
+    border: 1px solid mat.get-color-from-palette($secondary, 400);
+    color: mat.get-color-from-palette($accent, 500);
   }
 }

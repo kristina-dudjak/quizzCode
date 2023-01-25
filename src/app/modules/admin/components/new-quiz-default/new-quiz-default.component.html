@@ -1,60 +1,71 @@
 <form class="quiz-form" [formGroup]="quizForm" *ngIf="user.isAdmin">
-  <div class="quiz-form__actions">
+  <div class="quiz-form__wrapper">
+    <div class="quiz-form__wrapper__actions">
+      <button
+        class="quiz-form__wrapper__actions__action"
+        mat-raised-button
+        (click)="deleteQuiz(attemptedQuiz, questions)"
+      >
+        Delete quiz
+      </button>
+      <button
+        class="quiz-form__wrapper__actions__action"
+        mat-raised-button
+        (click)="resetQuiz()"
+      >
+        Reset quiz
+      </button>
+    </div>
+    <mat-form-field class="quiz-form__wrapper__field" appearance="outline">
+      <mat-label class="quiz-form__wrapper__field__label"
+        >Quiz language name</mat-label
+      >
+      <input
+        class="quiz-form__wrapper__field__input"
+        matInput
+        placeholder="Ex. Java"
+        required
+        type="text"
+        formControlName="language"
+      />
+    </mat-form-field>
+    <mat-form-field class="quiz-form__wrapper__field" appearance="outline">
+      <mat-label class="quiz-form__wrapper__field__label"
+        >Quiz image url</mat-label
+      >
+      <input
+        class="quiz-form__wrapper__field__input"
+        matInput
+        placeholder="Ex. https://.../.png"
+        required
+        type="text"
+        formControlName="thumbnail"
+      />
+    </mat-form-field>
+    <mat-form-field class="quiz-form__wrapper__field" appearance="outline">
+      <mat-label class="quiz-form__wrapper__field__label">Quiz level</mat-label>
+      <input
+        class="quiz-form__wrapper__field__input"
+        matInput
+        placeholder="Ex. Easy"
+        required
+        type="text"
+        formControlName="level"
+      />
+    </mat-form-field>
+    <app-questions-input
+      class="quiz-form__wrapper__questions"
+      [form]="quizForm"
+      (newEvent)="addQuestion()"
+    ></app-questions-input>
     <button
-      class="quiz-form__actions__action"
-      (click)="deleteQuiz(attemptedQuiz, questions)"
+      class="quiz-form__wrapper__submit"
+      mat-raised-button
+      type="submit"
+      [disabled]="!quizForm.valid"
+      (click)="onSubmit()"
     >
-      Delete quiz
-    </button>
-    <button class="quiz-form__actions__action" (click)="resetQuiz()">
-      Reset quiz
+      Submit
     </button>
   </div>
-  <mat-form-field class="quiz-form__field" appearance="outline">
-    <mat-label class="quiz-form__field__label">Quiz language name</mat-label>
-    <input
-      class="quiz-form__field__input"
-      matInput
-      placeholder="Ex. Java"
-      required
-      type="text"
-      formControlName="language"
-    />
-  </mat-form-field>
-  <mat-form-field class="quiz-form__field" appearance="outline">
-    <mat-label class="quiz-form__field__label">Quiz image url</mat-label>
-    <input
-      class="quiz-form__field__input"
-      matInput
-      placeholder="Ex. https://.../.png"
-      required
-      type="text"
-      formControlName="thumbnail"
-    />
-  </mat-form-field>
-  <mat-form-field class="quiz-form__field" appearance="outline">
-    <mat-label class="quiz-form__field__label">Quiz level</mat-label>
-    <input
-      class="quiz-form__field__input"
-      matInput
-      placeholder="Ex. Easy"
-      required
-      type="text"
-      formControlName="level"
-    />
-  </mat-form-field>
-  <app-questions-input
-    class="quiz-form__questions"
-    [form]="quizForm"
-    (newEvent)="addQuestion()"
-  ></app-questions-input>
-  <button
-    class="quiz-form__submit"
-    mat-raised-button
-    type="submit"
-    [disabled]="!quizForm.valid"
-    (click)="onSubmit()"
-  >
-    Submit
-  </button>
 </form>
