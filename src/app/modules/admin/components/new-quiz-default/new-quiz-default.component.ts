@@ -1,10 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormBuilder, FormArray } from '@angular/forms'
+import { FormBuilder, FormArray, FormControl } from '@angular/forms'
+import { MatDialog } from '@angular/material/dialog'
 import { Router } from '@angular/router'
-import { Question } from 'src/app/shared/models/Question'
-import { AttemptedQuiz, Quiz } from 'src/app/shared/models/Quiz'
+import { AttemptedQuiz } from 'src/app/shared/models/Quiz'
 import { User } from 'src/app/shared/models/User'
+import { ValidationService } from 'src/app/shared/services/validation.service'
 import { AdminService } from '../../services/admin.service'
+import { DeleteLevelDialogComponent } from '../delete-level-dialog/delete-level-dialog.component'
+import { DeleteQuizDialogComponent } from '../delete-quiz-dialog/delete-quiz-dialog.component'
 
 @Component({
   selector: 'app-new-quiz-default',
@@ -12,119 +15,143 @@ import { AdminService } from '../../services/admin.service'
   styleUrls: ['./new-quiz-default.component.scss']
 })
 export class NewQuizDefaultComponent implements OnInit {
-  constructor(
+  constructor (
     private fb: FormBuilder,
-    private adminService: AdminService,
-    private router: Router
+    private validationService: ValidationService,
+    private router: Router,
+    private dialog: MatDialog,
+    private adminService: AdminService
   ) {}
-  @Input() questions: Question[]
   @Input() attemptedQuiz: AttemptedQuiz
   @Input() user: User
+  @Input() levels: string[]
   quizForm = this.fb.group({
     language: [''],
     thumbnail: [''],
-    level: [''],
-    questions: this.initQuestions()
+    levels: this.fb.array([
+      this.fb.group({
+        levelId: [''],
+        levelName: [''],
+        questions: this.initQuestions()
+      })
+    ])
   })
 
-  ngOnInit() {
+  initQuestions () {
+    return this.fb.array([
+      this.fb.group({
+        questionId: [0],
+        questionName: [''],
+        questionAnswers: this.initQuestionAnswers()
+      })
+    ])
+  }
+
+  initQuestionAnswers () {
+    return this.fb.array([this.createAnswer(0), this.createAnswer(1)], {
+      validators: this.validationService.minOneCorrectAnswer
+    })
+  }
+
+  createAnswer (index: number) {
+    return this.fb.group({
+      answerId: [index],
+      answerName: [''],
+      answerCorrect: [false]
+    })
+  }
+
+  tabs = ['Easy', 'Medium', 'Hard']
+  selected = new FormControl(0)
+
+  ngOnInit () {
+    const levels = this.quizForm.get('levels') as FormArray
+    levels.clear()
+    this.tabs.forEach(tab => {
+      levels.push(
+        this.fb.group({
+          levelId: this.tabs.indexOf(tab),
+          levelName: tab,
+          questions: this.initQuestions()
+        })
+      )
+    })
     if (!this.user.isAdmin) this.router.navigateByUrl('quizzes')
-    if (this.attemptedQuiz && this.attemptedQuiz.name !== '') {
+    if (this.levels && this.attemptedQuiz && this.attemptedQuiz.name !== '') {
+      this.tabs = []
       this.quizForm.patchValue({
         language: this.attemptedQuiz.name,
-        thumbnail: this.attemptedQuiz.thumbnail,
-        level: this.attemptedQuiz.level
+        thumbnail: this.attemptedQuiz.thumbnail
       })
-      const control = this.quizForm.get('questions') as FormArray
-      control.clear()
-      this.questions.forEach(question => {
-        control.push(
+      const levels = this.quizForm.get('levels') as FormArray
+      levels.clear()
+      this.levels.forEach(level => {
+        this.tabs.push(level)
+
+        levels.push(
           this.fb.group({
-            questionId: question.id,
-            questionName: question.name,
-            questionAnswers: this.initQuestionAnswers()
+            levelId: this.tabs.indexOf(level),
+            levelName: level,
+            questions: this.initQuestions()
           })
         )
-        const ans = control.controls[question.id].get(
-          'questionAnswers'
-        ) as FormArray
-        ans.clear()
-
-        question.answers.forEach(answer => {
-          ans.push(
-            this.fb.group({
-              answerId: answer.id,
-              answerName: answer.name,
-              answerCorrect: answer.correct
-            })
-          )
-        })
       })
     }
   }
 
-  initQuestions() {
-    return this.fb.array([
-      this.fb.group({
-        questionId: [''],
-        questionName: [''],
-        questionAnswers: this.initQuestionAnswers()
-      })
-    ])
-  }
-
-  initQuestionAnswers() {
-    return this.fb.array([
-      this.fb.group({
-        answerId: [''],
-        answerName: [''],
-        answerCorrect: [false]
-      })
-    ])
-  }
-
-  addQuestion() {
-    const control = <FormArray>this.quizForm.get('questions')
-    control.push(
-      this.fb.group({
-        questionName: [''],
-        questionAnswers: this.initQuestionAnswers()
-      })
+  async delete () {
+    await this.adminService.deleteQuiz(
+      this.quizForm.value,
+      this.attemptedQuiz.name
     )
-  }
-
-  resetQuiz() {
-    this.quizForm.reset()
-  }
-
-  async deleteQuiz(attemptedQuiz: Quiz, questions: Question[]) {
-    await this.adminService.deleteAttemptedQuiz(attemptedQuiz, questions)
     this.router.navigateByUrl('quizzes')
   }
 
-  async onSubmit() {
-    const { thumbnail, language, level, questions } = this.quizForm.value
-    const quests = questions.map((question, id) => {
-      const answers = question.questionAnswers.map((answer, answerIndex) => {
-        return {
-          name: answer.answerName,
-          correct: answer.answerCorrect,
-          id: answerIndex.toString()
-        }
-      })
-      return { name: question.questionName, answers, id }
+  async deleteQuiz () {
+    this.dialog.open(DeleteQuizDialogComponent, {
+      data: {
+        submitFunction: await this.delete.bind(this)
+      }
     })
-    const quiz: Quiz = {
-      thumbnail,
-      name: language,
-      level,
-      questions: quests
+  }
+
+  async deleteLevel (index: number) {
+    this.dialog.open(DeleteLevelDialogComponent, {
+      data: {
+        submitFunction: await this.removeTab.bind(this, index)
+      }
+    })
+  }
+
+  async onSubmit () {
+    let name = ''
+    if (this.attemptedQuiz && this.attemptedQuiz.name !== '') {
+      name = this.attemptedQuiz.name
     }
-    await this.adminService.saveNewQuizToDb(
-      quiz,
-      this.attemptedQuiz,
-      this.questions
-    )
+    await this.adminService.saveQuiz(this.quizForm.value, name)
     this.router.navigateByUrl('quizzes')
+  }
+
+  addTab () {
+    this.tabs.push('New')
+    this.selected.setValue(this.tabs.length - 1)
+    const levels = this.quizForm.get('levels') as FormArray
+    levels.push(
+      this.fb.group({
+        levelId: this.tabs.indexOf('New'),
+        levelName: 'New',
+        questions: this.initQuestions()
+      })
+    )
+  }
+
+  async removeTab (index: number) {
+    if (this.attemptedQuiz && this.attemptedQuiz.name !== '') {
+      await this.adminService.deleteQuizLevel(this.quizForm.value, index)
+    }
+    this.tabs.splice(index, 1)
+    this.selected.setValue(this.tabs.length - 1)
+    const levels = this.quizForm.get('levels') as FormArray
+    levels.removeAt(index)
   }
 }

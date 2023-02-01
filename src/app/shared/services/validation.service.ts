@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms'
+import { AbstractControl, FormArray } from '@angular/forms'
 import { ValidationMessages } from 'src/app/shared/const/ValidationMessages'
 
 @Injectable({
@@ -7,7 +7,7 @@ import { ValidationMessages } from 'src/app/shared/const/ValidationMessages'
 })
 export class ValidationService {
   validate (controlName: string) {
-    return (control: AbstractControl): ValidationErrors | null => {
+    return (control: AbstractControl) => {
       const form = control.get(controlName)
       if (!form?.errors) return null
       const [error] = Object.keys(form.errors)
@@ -15,8 +15,8 @@ export class ValidationService {
     }
   }
 
-  validatePasswordMatch (controlName: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
+  validatePasswordMatch (controlName: string) {
+    return (control: AbstractControl) => {
       const form = control.get(controlName)
       if (form.value === control.get('password').value) {
         return null
@@ -24,5 +24,11 @@ export class ValidationService {
       form?.setErrors({ [controlName]: true })
       return { [controlName]: ValidationMessages['mismatch'] }
     }
+  }
+
+  minOneCorrectAnswer = (control: FormArray) => {
+    return control.controls.find(answer => answer.get('answerCorrect').value)
+      ? null
+      : { minOneCorrectAnswer: true }
   }
 }

@@ -3,9 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog'
 import { PasswordRegex } from 'src/app/shared/const/PasswordRegex'
 import { StoreService } from 'src/app/shared/services/store.service'
+import { ValidationService } from 'src/app/shared/services/validation.service'
 import { PasswordResetDialogComponent } from '../../components/password-reset-dialog/password-reset-dialog.component'
 import { AuthService } from '../../services/auth.service'
-import { ValidationService } from '../../services/validation.service'
 
 @Component({
   selector: 'app-login',

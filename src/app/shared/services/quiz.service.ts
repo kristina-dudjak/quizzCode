@@ -62,31 +62,26 @@ export class QuizService {
       this.storeService.updateLevelsState(levels)
     })
   }
-  initialQuestionsLoad (language: string, level: string) {
+  async initialQuestionsLoad (language: string, level: string) {
     const questions: Question[] = []
-    firstValueFrom(
-      this.db
-        .collection(
-          `quizzes/${language}/Level/${level}/multipleChoiceQuestions`,
-          ref => ref.orderBy('id')
-        )
-        .snapshotChanges()
-        .pipe(
-          map(actions =>
-            actions.map(
-              async ({ payload: { doc } }: DocumentChangeAction<unknown>) => {
-                questions.push({
-                  id: doc.data()['id'],
-                  name: doc.data()['name'],
-                  answers: await this.getAnswers(language, level, doc.id)
-                })
-              }
-            )
-          )
-        )
-    ).then(() => {
-      this.storeService.updateQuestionsState(questions)
-    })
+    const docs = await this.db
+      .collection(
+        `quizzes/${language}/Level/${level}/multipleChoiceQuestions`,
+        ref => ref.orderBy('id')
+      )
+      .get()
+      .toPromise()
+
+    await Promise.all(
+      docs.docs.map(async doc => {
+        questions.push({
+          id: doc.data()['id'],
+          name: doc.data()['name'],
+          answers: await this.getAnswers(language, level, doc.id)
+        })
+      })
+    )
+    this.storeService.updateQuestionsState(questions)
   }
 
   async getAnswers (language: string, level: string, questionId: string) {

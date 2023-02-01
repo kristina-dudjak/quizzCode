@@ -1,0 +1,32 @@
+<div class="level" [formGroup]="quizForm">
+  <div class="level__array" formArrayName="levels">
+    <div class="level__array__item" [formGroupName]="levelIndex">
+      <mat-form-field class="level__array__item__field" appearance="outline">
+        <mat-label class="level__array__item__field__label">Level</mat-label>
+        <input
+          class="level__array__item__field__input"
+          matInput
+          required
+          type="text"
+          formControlName="levelName"
+        />
+      </mat-form-field>
+      <button
+        class="level__array__item__update"
+        mat-button
+        [disabled]="quizForm.value.levels[levelIndex].levelName === ''"
+        (click)="updateLevel()"
+      >
+        Update level name
+      </button>
+      <app-questions-input
+        class="level__array__item__questions"
+        *ngIf="level !== undefined"
+        [level]="level"
+        [form]="quizForm"
+        [questions]="questions$ | async"
+      >
+      </app-questions-input>
+    </div>
+  </div>
+</div>

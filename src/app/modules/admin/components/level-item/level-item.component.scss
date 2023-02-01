@@ -1,0 +1,24 @@
+@use '@angular/material' as mat;
+@import '../../../../../scss/colors.scss';
+
+.level {
+  &__array {
+    &__item {
+      &__update {
+        margin-left: 20px;
+        border-radius: 40px;
+        border: 1px solid mat.get-color-from-palette($secondary, 600);
+        padding: 8px 20px;
+        background-color: mat.get-color-from-palette($secondary, 600);
+        color: mat.get-color-from-palette($secondary, 100);
+        &:hover {
+          background-color: mat.get-color-from-palette($secondary, 800);
+        }
+        &:disabled {
+          background-color: mat.get-color-from-palette($secondary, 300);
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

@@ -18,25 +18,7 @@
     display: flex;
     flex-direction: column;
 
-    &__actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 20px;
-
-      &__action {
-        border: 0;
-        border-color: none;
-        padding: 8px 12px;
-        background-color: mat.get-color-from-palette($secondary, 600);
-        color: mat.get-color-from-palette($secondary, 50);
-        &:hover {
-          background-color: mat.get-color-from-palette($secondary, 800);
-        }
-      }
-    }
-
-    &__submit {
+    &__action {
       margin: 24px 0;
       border-radius: 40px;
       background-color: mat.get-color-from-palette($secondary, 600);

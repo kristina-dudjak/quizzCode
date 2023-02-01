@@ -26,9 +26,9 @@
       >
       <button
         class="question__answers__inputs__remove"
-        *ngIf="getQuestionAnswers(question).length > 1"
+        *ngIf="getQuestionAnswers(question).length > 2"
         mat-icon-button
-        (click)="removeQuestionAnswer(i)"
+        (click)="removeQuestionAnswer(j)"
       >
         <mat-icon class="question__answers__inputs__remove__icon"
           >delete</mat-icon
@@ -39,7 +39,7 @@
   <button
     class="question__add-new"
     mat-icon-button
-    (click)="addQuestionAnswer(i)"
+    (click)="addQuestionAnswer()"
   >
     <mat-icon class="question__add-new__icon">note_add</mat-icon>
   </button>

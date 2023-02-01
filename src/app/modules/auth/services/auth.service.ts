@@ -24,9 +24,13 @@ export class AuthService {
   }
 
   async checkIfAdmin (user: firebase.User) {
-    return await (
-      await this.db.collection(`users`).doc(user.uid).ref.get()
-    ).data()['isAdmin']
+    if (!(await this.db.collection(`users`).doc(user.uid).ref.get()).exists) {
+      return false
+    } else {
+      return await (
+        await this.db.collection(`users`).doc(user.uid).ref.get()
+      ).data()['isAdmin']
+    }
   }
 
   async googleSignIn (rememberMe: boolean) {

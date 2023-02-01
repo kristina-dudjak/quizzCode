@@ -12,9 +12,27 @@
     padding: 28px;
   }
 
-  &__title {
-    align-self: center;
-    color: mat.get-color-from-palette($secondary, 900);
+  &__header {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    &__title {
+      align-self: center;
+      color: mat.get-color-from-palette($secondary, 900);
+      margin: 0;
+    }
+    &__edit {
+      border: 2px solid mat.get-color-from-palette($secondary, 500);
+      background-color: mat.get-color-from-palette($secondary, 200);
+      border-radius: 12px;
+      cursor: pointer;
+
+      &__icon {
+        color: mat.get-color-from-palette($secondary, 500);
+      }
+    }
   }
 
   &__levels {

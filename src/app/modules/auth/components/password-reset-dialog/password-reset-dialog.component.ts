@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
+import { ValidationService } from 'src/app/shared/services/validation.service'
 import { AuthService } from '../../services/auth.service'
-import { ValidationService } from '../../services/validation.service'
 
 @Component({
   selector: 'app-password-reset-dialog',

@@ -14,7 +14,7 @@
     <mat-menu class="custom-menu" #menu="matMenu">
       <button mat-menu-item routerLink="/">Quizzes</button>
       <button mat-menu-item *ngIf="user.isAdmin" (click)="goToAdmin()">
-        Admin settings
+        Add new quiz
       </button>
       <button mat-menu-item (click)="signOut()">Log out</button>
     </mat-menu>

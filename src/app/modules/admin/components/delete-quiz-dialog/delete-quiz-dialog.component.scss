@@ -1,0 +1,36 @@
+@use '@angular/material' as mat;
+@import '../../../../../scss/colors.scss';
+
+.quiz-dialog {
+  padding: 40px;
+  background-color: mat.get-color-from-palette($secondary, 300);
+  display: flex;
+  flex-direction: column;
+  border-radius: 40px;
+  align-items: center;
+  @media screen and (max-width: 768px) {
+    padding: 28px;
+  }
+
+  &__title {
+    align-self: center;
+    color: mat.get-color-from-palette($secondary, 900);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 16px;
+
+    &__submit,
+    &__close {
+      border-radius: 40px;
+      border: 1px solid mat.get-color-from-palette($secondary, 700);
+      padding: 8px 20px;
+      background-color: mat.get-color-from-palette($secondary, 700);
+      color: mat.get-color-from-palette($secondary, 100);
+      &:hover {
+        background-color: mat.get-color-from-palette($secondary, 900);
+      }
+    }
+  }
+}

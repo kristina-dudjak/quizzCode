@@ -1,11 +1,11 @@
-<div class="form" [formGroup]="form">
+<div class="form" [formGroup]="level">
   <div class="form__array" formArrayName="questions">
     <mat-label class="form__array__label">Questions</mat-label>
     <div
       class="form__array__questions"
-      *ngFor="let question of getQuestions(form); let i = index"
+      *ngFor="let question of getQuestions(level); let j = index"
     >
-      <div class="form__array__questions__group" [formGroupName]="i">
+      <div class="form__array__questions__group" [formGroupName]="j">
         <div class="form__array__questions__group__question">
           <mat-form-field
             class="form__array__questions__group__question__field"
@@ -13,7 +13,7 @@
           >
             <mat-label
               class="form__array__questions__group__question__field__label"
-              >Question {{ i }}</mat-label
+              >Question {{ j }}</mat-label
             >
             <input
               class="form__array__questions__group__question__field__input"
@@ -24,9 +24,10 @@
             />
           </mat-form-field>
           <button
+            *ngIf="getQuestions(level).length > 1"
             class="form__array__questions__group__question__remove"
             mat-icon-button
-            (click)="removeQuestion(i)"
+            (click)="removeQuestion(j)"
           >
             <mat-icon
               class="form__array__questions__group__question__remove__icon"
@@ -41,7 +42,7 @@
           <app-answers-input
             class="form__array__questions__group__answers__list"
             [question]="question"
-            [i]="i"
+            [questionIndex]="j"
             [form]="form"
           ></app-answers-input>
         </div>
@@ -54,6 +55,6 @@
     type="button"
     (click)="addQuestion()"
   >
-    + Add another question
+    + Add question
   </button>
 </div>

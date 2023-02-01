@@ -3,5 +3,6 @@ export const ValidationMessages: { [errorCode: string]: string } = {
   email: 'Please provide a valid email.',
   minlength: 'Password should have at least 8 characters.',
   pattern: 'Password should have min 1 number and special character.',
-  mismatch: 'Passwords do not match.'
+  mismatch: 'Passwords do not match.',
+  minAnswers: 'A question must contain at least 1 correct answer.'
 }

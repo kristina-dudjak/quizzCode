@@ -2,8 +2,8 @@ import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { PasswordRegex } from 'src/app/shared/const/PasswordRegex'
 import { StoreService } from 'src/app/shared/services/store.service'
+import { ValidationService } from 'src/app/shared/services/validation.service'
 import { AuthService } from '../../services/auth.service'
-import { ValidationService } from '../../services/validation.service'
 
 @Component({
   selector: 'app-register',

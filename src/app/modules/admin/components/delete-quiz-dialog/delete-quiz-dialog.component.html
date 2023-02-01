@@ -1,0 +1,19 @@
+<div class="quiz-dialog" mat-dialog-content>
+  <h3 class="quiz-dialog__title" mat-dialog-title>
+    Are you sure you want to delete the whole quiz?
+  </h3>
+  <div class="quiz-dialog__actions" mat-dialog-actions>
+    <button
+      class="quiz-dialog__actions__submit"
+      mat-button
+      mat-dialog-close
+      type="submit"
+      (click)="deleteQuiz()"
+    >
+      Yes
+    </button>
+    <button class="quiz-dialog__actions__close" mat-button mat-dialog-close>
+      No
+    </button>
+  </div>
+</div>

@@ -1,21 +1,5 @@
 <form class="quiz-form" [formGroup]="quizForm" *ngIf="user.isAdmin">
   <div class="quiz-form__wrapper">
-    <div class="quiz-form__wrapper__actions">
-      <button
-        class="quiz-form__wrapper__actions__action"
-        mat-raised-button
-        (click)="deleteQuiz(attemptedQuiz, questions)"
-      >
-        Delete quiz
-      </button>
-      <button
-        class="quiz-form__wrapper__actions__action"
-        mat-raised-button
-        (click)="resetQuiz()"
-      >
-        Reset quiz
-      </button>
-    </div>
     <mat-form-field class="quiz-form__wrapper__field" appearance="outline">
       <mat-label class="quiz-form__wrapper__field__label"
         >Quiz language name</mat-label
@@ -42,30 +26,67 @@
         formControlName="thumbnail"
       />
     </mat-form-field>
-    <mat-form-field class="quiz-form__wrapper__field" appearance="outline">
-      <mat-label class="quiz-form__wrapper__field__label">Quiz level</mat-label>
-      <input
-        class="quiz-form__wrapper__field__input"
-        matInput
-        placeholder="Ex. Easy"
-        required
-        type="text"
-        formControlName="level"
-      />
-    </mat-form-field>
-    <app-questions-input
-      class="quiz-form__wrapper__questions"
-      [form]="quizForm"
-      (newEvent)="addQuestion()"
-    ></app-questions-input>
+    <mat-tab-group
+      class="quiz-form__wrapper__tabs"
+      [selectedIndex]="selected.value"
+      (selectedIndexChange)="selected.setValue($event)"
+    >
+      <mat-tab
+        class="quiz-form__wrapper__tabs__tab"
+        *ngFor="let tab of tabs; let i = index"
+        [label]="tab"
+      >
+        <ng-template class="quiz-form__wrapper__tabs__tab__label" mat-tab-label>
+          {{ tab }}
+          <button
+            class="quiz-form__wrapper__tabs__tab__label__delete"
+            mat-icon-button
+            [disabled]="tabs.length === 1"
+            (click)="deleteLevel(i)"
+          >
+            <mat-icon class="quiz-form__wrapper__tabs__tab__label__delete__icon"
+              >highlight_off</mat-icon
+            >
+          </button>
+        </ng-template>
+        <app-level-item
+          class="quiz-form__wrapper__tabs__tab__level"
+          [quizForm]="quizForm"
+          [levelIndex]="i"
+          [tabs]="tabs"
+          [attemptedQuiz]="attemptedQuiz"
+        ></app-level-item>
+      </mat-tab>
+      <mat-tab class="quiz-form__wrapper__tabs__tab" disabled>
+        <ng-template class="quiz-form__wrapper__tabs__tab__label" mat-tab-label>
+          <button
+            class="quiz-form__wrapper__tabs__tab__label__add"
+            mat-icon-button
+            (click)="addTab()"
+          >
+            <mat-icon class="quiz-form__wrapper__tabs__tab__label__add__icon"
+              >add_circle</mat-icon
+            >
+          </button>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
     <button
-      class="quiz-form__wrapper__submit"
+      class="quiz-form__wrapper__action"
       mat-raised-button
       type="submit"
       [disabled]="!quizForm.valid"
       (click)="onSubmit()"
     >
-      Submit
+      Save quiz
+    </button>
+    <button
+      class="quiz-form__wrapper__action"
+      *ngIf="attemptedQuiz && attemptedQuiz.name !== ''"
+      mat-raised-button
+      (click)="deleteQuiz()"
+    >
+      Delete quiz
     </button>
   </div>
 </form>
