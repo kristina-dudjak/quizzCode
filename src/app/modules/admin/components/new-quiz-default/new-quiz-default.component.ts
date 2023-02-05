@@ -25,6 +25,7 @@ export class NewQuizDefaultComponent implements OnInit {
   @Input() attemptedQuiz: AttemptedQuiz
   @Input() user: User
   @Input() levels: string[]
+  oldLevels: any[] = []
   quizForm = this.fb.group({
     language: [''],
     thumbnail: [''],
@@ -84,9 +85,11 @@ export class NewQuizDefaultComponent implements OnInit {
         thumbnail: this.attemptedQuiz.thumbnail
       })
       const levels = this.quizForm.get('levels') as FormArray
+      this.oldLevels = []
       levels.clear()
       this.levels.forEach(level => {
         this.tabs.push(level)
+        this.oldLevels.push(level)
 
         levels.push(
           this.fb.group({
@@ -96,13 +99,15 @@ export class NewQuizDefaultComponent implements OnInit {
           })
         )
       })
+      this.oldLevels = this.quizForm.value.levels
     }
   }
 
   async delete () {
     await this.adminService.deleteQuiz(
       this.quizForm.value,
-      this.attemptedQuiz.name
+      this.attemptedQuiz.name,
+      this.oldLevels
     )
     this.router.navigateByUrl('quizzes')
   }
@@ -128,7 +133,7 @@ export class NewQuizDefaultComponent implements OnInit {
     if (this.attemptedQuiz && this.attemptedQuiz.name !== '') {
       name = this.attemptedQuiz.name
     }
-    await this.adminService.saveQuiz(this.quizForm.value, name)
+    await this.adminService.saveQuiz(this.quizForm.value, name, this.oldLevels)
     this.router.navigateByUrl('quizzes')
   }
 

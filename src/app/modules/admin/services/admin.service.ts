@@ -37,7 +37,7 @@ export class AdminService {
       }
     })
   }
-  async deleteQuiz (quiz: any, attemptedQuiz: string) {
+  async deleteQuiz (quiz: any, attemptedQuiz: string, oldLevels: any[]) {
     if (attemptedQuiz !== '') {
       const levelPromises = []
       quiz.levels.forEach(async level => {
@@ -73,14 +73,51 @@ export class AdminService {
         levelPromises.push(await levelRef.delete())
       })
       await Promise.all(levelPromises)
+
+      const oldLevelPromises = []
+      oldLevels.forEach(async level => {
+        const questionPromises = []
+        level.questions.forEach(async question => {
+          const answerRefs = await this.db
+            .collection(
+              `quizzes/${attemptedQuiz}/Level/${
+                level.levelName
+              }/multipleChoiceQuestions/${question.questionId.toString()}/answers`
+            )
+            .ref.get()
+          const answerPromises = []
+          answerRefs.forEach(async doc => {
+            answerPromises.push(await doc.ref.delete())
+          })
+          questionPromises.push(await Promise.all(answerPromises))
+        })
+        const questionRefs = await this.db
+          .collection(
+            `quizzes/${attemptedQuiz}/Level/${level.levelName}/multipleChoiceQuestions`
+          )
+          .ref.get()
+        const questionDeletes = []
+        questionRefs.forEach(async doc => {
+          questionDeletes.push(await doc.ref.delete())
+        })
+        oldLevelPromises.push(await Promise.all(questionPromises))
+        oldLevelPromises.push(await Promise.all(questionDeletes))
+        const levelRef = this.db.doc(
+          `quizzes/${attemptedQuiz}/Level/${level.levelName}`
+        ).ref
+        levelPromises.push(await levelRef.delete())
+      })
+      await Promise.all(oldLevelPromises)
+
       const quizRef = this.db.doc(`quizzes/${attemptedQuiz}`).ref
       await quizRef.delete()
     }
   }
 
-  async saveQuiz (quiz: any, attemptedQuiz: string) {
+  async saveQuiz (quiz: any, attemptedQuiz: string, oldLevels: any[]) {
+    console.log(oldLevels)
     if (attemptedQuiz !== '') {
-      await this.deleteQuiz(quiz, attemptedQuiz)
+      await this.deleteQuiz(quiz, attemptedQuiz, oldLevels)
     }
 
     const quizzesRef = this.db.collection('quizzes').doc(quiz.language)
