@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { QuizService } from 'src/app/shared/services/quiz.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  constructor (private db: AngularFirestore, private quizService: QuizService) {}
+  constructor (private db: AngularFirestore) {}
 
   async deleteQuizLevel (quiz: any, levelIndex: number) {
     await quiz.levels.forEach(async level => {
@@ -38,81 +37,77 @@ export class AdminService {
       }
     })
   }
-
   async deleteQuiz (quiz: any, attemptedQuiz: string) {
-    if (attemptedQuiz != '') {
-      await quiz.levels.forEach(async level => {
+    if (attemptedQuiz !== '') {
+      const levelPromises = []
+      quiz.levels.forEach(async level => {
+        const questionPromises = []
         level.questions.forEach(async question => {
-          const answerRefs: firebase.default.firestore.QuerySnapshot =
-            await this.db
-              .collection(
-                `quizzes/${attemptedQuiz}/Level/${
-                  level.levelName
-                }/multipleChoiceQuestions/${question.questionId.toString()}/answers`
-              )
-              .ref.get()
-          answerRefs.forEach(doc => {
-            doc.ref.delete()
+          const answerRefs = await this.db
+            .collection(
+              `quizzes/${attemptedQuiz}/Level/${
+                level.levelName
+              }/multipleChoiceQuestions/${question.questionId.toString()}/answers`
+            )
+            .ref.get()
+          const answerPromises = []
+          answerRefs.forEach(async doc => {
+            answerPromises.push(await doc.ref.delete())
           })
+          questionPromises.push(await Promise.all(answerPromises))
         })
         const questionRefs = await this.db
           .collection(
             `quizzes/${attemptedQuiz}/Level/${level.levelName}/multipleChoiceQuestions`
           )
           .ref.get()
-        questionRefs.forEach(doc => {
-          doc.ref.delete()
+        const questionDeletes = []
+        questionRefs.forEach(async doc => {
+          questionDeletes.push(await doc.ref.delete())
         })
+        levelPromises.push(await Promise.all(questionPromises))
+        levelPromises.push(await Promise.all(questionDeletes))
         const levelRef = this.db.doc(
           `quizzes/${attemptedQuiz}/Level/${level.levelName}`
         ).ref
-        levelRef.delete()
+        levelPromises.push(await levelRef.delete())
       })
+      await Promise.all(levelPromises)
       const quizRef = this.db.doc(`quizzes/${attemptedQuiz}`).ref
-      quizRef.delete()
+      await quizRef.delete()
     }
   }
 
   async saveQuiz (quiz: any, attemptedQuiz: string) {
-    const writeBatch = this.db.firestore.batch()
-    if (attemptedQuiz != '' && attemptedQuiz !== quiz.language) {
+    if (attemptedQuiz !== '') {
       await this.deleteQuiz(quiz, attemptedQuiz)
     }
 
+    const quizzesRef = this.db.collection('quizzes').doc(quiz.language)
+    await quizzesRef.set({ thumbnail: quiz.thumbnail }, { merge: true })
+
     const levelPromises = []
-    quiz.levels.forEach(level => {
-      console.log(level)
-      const quizzesRef = this.db.collection('quizzes').doc(quiz.language)
-      writeBatch.set(
-        quizzesRef.ref,
-        { thumbnail: quiz.thumbnail },
-        { merge: true }
-      )
+    quiz.levels.forEach(async level => {
       const levelRef = quizzesRef.collection('Level').doc(level.levelName)
-      writeBatch.set(
-        levelRef.ref,
+      await levelRef.set(
         { level: level.levelName, id: level.levelId },
         { merge: true }
       )
 
       const questionPromises = []
-      level.questions.forEach(question => {
+      level.questions.forEach(async question => {
         const questionRef = this.db
           .collection(
             `quizzes/${quiz.language}/Level/${level.levelName}/multipleChoiceQuestions`
           )
           .doc(question.questionId.toString())
-        writeBatch.set(
-          questionRef.ref,
-          {
-            name: question.questionName,
-            id: question.questionId
-          },
+        await questionRef.set(
+          { name: question.questionName, id: question.questionId },
           { merge: true }
         )
 
         const answerPromises = []
-        question.questionAnswers.forEach(answer => {
+        question.questionAnswers.forEach(async answer => {
           const answerRef = this.db
             .collection(
               `quizzes/${quiz.language}/Level/${
@@ -120,21 +115,9 @@ export class AdminService {
               }/multipleChoiceQuestions/${question.questionId.toString()}/answers`
             )
             .doc(answer.answerId.toString())
-          writeBatch.set(
-            answerRef.ref,
-            {
-              name: answer.answerName,
-              correct: answer.answerCorrect
-            },
-            { merge: true }
-          )
-
           answerPromises.push(
             answerRef.set(
-              {
-                name: answer.answerName,
-                correct: answer.answerCorrect
-              },
+              { name: answer.answerName, correct: answer.answerCorrect },
               { merge: true }
             )
           )
@@ -144,85 +127,5 @@ export class AdminService {
       levelPromises.push(Promise.all(questionPromises))
     })
     await Promise.all(levelPromises)
-    await writeBatch.commit()
-  }
-
-  async renameQuizLevel (oldName: string, newName: string, quiz: any) {
-    await this.deleteOldLevel(oldName, newName, quiz)
-    await quiz.levels.forEach(async level => {
-      console.log(level)
-      if (
-        level.levelName === newName &&
-        level.questions[0].questionName !== '' &&
-        level.questions[0].questionAnswers[0].answerName !== '' &&
-        level.questions[0].questionAnswers[1].answerName !== ''
-      ) {
-        await this.db
-          .collection(`quizzes/${quiz.language}/Level`)
-          .doc(newName)
-          .set({ level: newName, id: level.levelId }, { merge: true })
-        await level.questions.forEach(async question => {
-          await this.db
-            .collection(
-              `quizzes/${quiz.language}/Level/${newName}/multipleChoiceQuestions`
-            )
-            .doc(question.questionId.toString())
-            .set(
-              {
-                name: question.questionName,
-                id: question.questionId
-              },
-              { merge: true }
-            )
-          await question.questionAnswers.forEach(async answer => {
-            await this.db
-              .collection(
-                `quizzes/${
-                  quiz.language
-                }/Level/${newName}/multipleChoiceQuestions/${question.questionId.toString()}/answers`
-              )
-              .doc(answer.answerId.toString())
-              .set(
-                {
-                  name: answer.answerName,
-                  correct: answer.answerCorrect
-                },
-                { merge: true }
-              )
-          })
-        })
-      }
-    })
-  }
-
-  async deleteOldLevel (oldName: string, newName: string, quiz: any) {
-    await quiz.levels.forEach(async level => {
-      if (level.levelName === newName) {
-        await level.questions.forEach(async question => {
-          const answerRefs = await this.db
-            .collection(
-              `quizzes/${
-                quiz.language
-              }/Level/${oldName}/multipleChoiceQuestions/${question.questionId.toString()}/answers`
-            )
-            .ref.get()
-          answerRefs.forEach(async doc => {
-            await doc.ref.delete()
-          })
-        })
-        const questionRefs = await this.db
-          .collection(
-            `quizzes/${quiz.language}/Level/${oldName}/multipleChoiceQuestions`
-          )
-          .ref.get()
-        questionRefs.forEach(async doc => {
-          await doc.ref.delete()
-        })
-        const levelRef = this.db.doc(
-          `quizzes/${quiz.language}/Level/${oldName}`
-        ).ref
-        levelRef.delete()
-      }
-    })
   }
 }
