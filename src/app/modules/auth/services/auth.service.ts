@@ -19,6 +19,8 @@ export class AuthService {
       if (user) {
         this.storeService.updateUserState(user, await this.checkIfAdmin(user))
         await this.checkIfAdmin(user)
+      } else {
+        this.storeService.updateUserState(undefined, false)
       }
     })
   }
