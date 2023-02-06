@@ -115,7 +115,6 @@ export class AdminService {
   }
 
   async saveQuiz (quiz: any, attemptedQuiz: string, oldLevels: any[]) {
-    console.log(oldLevels)
     if (attemptedQuiz !== '') {
       await this.deleteQuiz(quiz, attemptedQuiz, oldLevels)
     }

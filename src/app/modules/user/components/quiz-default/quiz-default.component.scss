@@ -13,6 +13,9 @@
     grid-column: 4 / 10;
     background-color: mat.get-color-from-palette($primary, 500);
     padding: 20px;
+    @media screen and (max-width: 768px) {
+      grid-column: 2 / 12;
+    }
   }
 
   &__paginator {

@@ -8,6 +8,9 @@
     }
     &__questions {
       margin: 20px 42px;
+      @media screen and (max-width: 768px) {
+        margin: 0;
+      }
 
       &__group {
         display: flex;
@@ -26,6 +29,9 @@
         }
         &__answers {
           margin-left: 24px;
+          @media screen and (max-width: 768px) {
+            margin: 0;
+          }
         }
       }
     }

@@ -41,6 +41,9 @@
     :hover {
       background-color: mat.get-color-from-palette($secondary, 700);
     }
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
 
     &__level {
       cursor: pointer;
